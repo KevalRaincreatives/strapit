@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "612544349040",
+    "project_id": "strapit-b85bd",
+    "storage_bucket": "strapit-b85bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612544349040:android:ca040ed7d483563150c5b5",
+        "android_client_info": {
+          "package_name": "com.rc.strapit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612544349040-pqe3fs6g1mfl9fla0g4jllskag1utl9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rc.strapit",
+            "certificate_hash": "e893714255c609988bd08a4af614ca8385e5812b"
+          }
+        },
+        {
+          "client_id": "612544349040-5cfoieqdq558t4ploq6652j6l4g12mnc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHSguJGYGyLxSep0-U1lqR4FA1pA7RCyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612544349040-5cfoieqdq558t4ploq6652j6l4g12mnc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
