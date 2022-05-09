@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/retry.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/UpdateProModel.dart';
+import 'package:strapit/screens/ChangePasswordScreen.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
@@ -86,7 +87,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         'Authorization': 'Bearer $token',
       };
 
-      final msg = jsonEncode({"email": emailCont.text, "password": UserPassword, "confirm_password": UserPassword,
+      final msg = jsonEncode({"id":widget.CustomerId,"email": emailCont.text, "password": UserPassword, "confirm_password": UserPassword,
         "name": nameCont.text, "phone": phoneCont.text, "country": countryCont.text});
 
 
@@ -429,6 +430,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontFamily: 'Bold'),
                     ),
                   ),
+
 
 
 

@@ -199,7 +199,16 @@ backgroundColor: sh_white,
                         ;
                       }
                       else {
-                        return Container();
+                        return Center(
+                          child: Text(
+                            'No Data Found',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: sh_app_black,
+                                fontFamily: 'Bold',
+                                fontWeight: FontWeight.bold),
+                          ),
+                        );
                       }
                     }
                     else {

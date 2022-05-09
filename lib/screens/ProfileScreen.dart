@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/retry.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/UpdateProModel.dart';
+import 'package:strapit/screens/ChangePasswordScreen.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
@@ -92,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       try {
         response=await client.post(
             Uri.parse(
-                'https://strapit.rcstaging.co.in/strapit/public/api/editCustomer'),
+                'https://strapit.rcstaging.co.in/strapit/public/api/editProfile'),
             headers: headers,
             body: msg);
       } finally {
@@ -423,6 +424,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               decoration: boxDecoration(
                                   bgColor: sh_btn_color, radius: 10, showShadow: true),
                               child: text("Update",
+                                  fontSize: 24.0,
+                                  textColor: sh_app_txt_color,
+                                  isCentered: true,
+                                  fontFamily: 'Bold'),
+                            ),
+                          ),
+                          SizedBox(height: 22,),
+                          InkWell(
+                            onTap: () async {
+                              launchScreen(context, ChangePasswordScreen.tag);
+                              // getUpdate();
+// MyCheck();
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.only(
+                                  top: 6, bottom: 10),
+                              decoration: boxDecoration(
+                                  bgColor: sh_btn_color, radius: 10, showShadow: true),
+                              child: text("Change Password",
                                   fontSize: 24.0,
                                   textColor: sh_app_txt_color,
                                   isCentered: true,

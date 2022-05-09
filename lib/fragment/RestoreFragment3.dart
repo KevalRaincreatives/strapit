@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/ListAllBackup2.dart';
@@ -28,20 +27,14 @@ class _RestoreFragmentState extends State<RestoreFragment> {
   String? pickdate = '', pickmonth = '', pickyear = '';
   DateTime selectedDate = DateTime.now();
   RestoreListModel? listResortModel;
-  List<RestoreListModelData?>? listResortModel2=[];
-  // Future<List<RestoreListModelData?>?>? listResortModel2;
-  int mmm=0;
-
 
   @override
   void initState() {
     super.initState();
     fetchRestore();
-    // listResortModel2 = fetchRestore(delay: 2);
   }
 
-  Future<List<RestoreListModelData?>?> fetchRestore() async {
-    EasyLoading.show(status: 'Please wait...');
+  Future<RestoreListModel?> fetchRestore() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       // String UserId = prefs.getString('UserId');
@@ -70,17 +63,11 @@ class _RestoreFragmentState extends State<RestoreFragment> {
       print('Response bodyregi: ${response.body}');
       // listAllBackupModeldata!.clear();
 
-      EasyLoading.dismiss();
+
       listResortModel = new RestoreListModel.fromJson(jsonResponse);
-      // listResortModel2=listResortModel!.data;
-// mmm++;
-// toast(mmm.toString());
-      setState(() {
-        listResortModel2=listResortModel!.data;
-      });
-      return listResortModel2;
+
+      return listResortModel;
     } catch (e) {
-      EasyLoading.dismiss();
       print('caught error $e');
     }
   }
@@ -317,7 +304,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
     }
 
     Widget StepList2(int index) {
-      if (listResortModel2![index]!.status == 0) {
+      if (listResortModel!.data![index]!.status == 0) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -481,7 +468,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
           ),
         );
       }
-      else if (listResortModel2![index]!.status == 1) {
+      else if (listResortModel!.data![index]!.status == 1) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -623,7 +610,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
           ),
         );
       }
-      else if (listResortModel2![index]!.status == 2) {
+      else if (listResortModel!.data![index]!.status == 2) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -797,7 +784,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
           ),
         );
       }
-      else if (listResortModel2![index]!.status == 3) {
+      else if (listResortModel!.data![index]!.status == 3) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -969,8 +956,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
             ],
           ),
         );
-      }
-      else if (listResortModel2![index]!.status == 4) {
+      } else if (listResortModel!.data![index]!.status == 4) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1139,8 +1125,7 @@ class _RestoreFragmentState extends State<RestoreFragment> {
             ],
           ),
         );
-      }
-      else if (listResortModel2![index]!.status == 5) {
+      } else if (listResortModel!.data![index]!.status == 5) {
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -1311,212 +1296,6 @@ class _RestoreFragmentState extends State<RestoreFragment> {
       }
     }
 
-    SetRestoreDate(int index){
-      if(listResortModel2![index]!.restoreTime != null) {
-        var inputFormat = DateFormat("yyyy-MM-dd");
-
-        String date1 = inputFormat.parse(
-            listResortModel2![index]!.restoreTime!.substring(0,10)).toString();
-        DateTime dateTime = DateTime.parse(date1);
-        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
-
-        String date2 = outputFormat.toString();
-
-        String lasttime=listResortModel2![index]!.restoreTime!.substring(10);
-        return Text(
-          listResortModel2![index]!
-              .restoreTime ==
-              null ? '' :
-          "Restored at : " +
-              date2 +lasttime,
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }else{
-        return Text('',
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }
-    }
-
-
-
-    Widget _buildList(){
-      return listResortModel2!.length != 0?
-      RefreshIndicator(
-        child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: listResortModel2!.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => EditPortalScreen(
-                  //         PortalId: portalListModel!.data![index]!.id.toString(),
-                  //         CustomerId: portalListModel!.data![index]!.userId!.toString(),
-                  //         UserIdName: portalListModel!.data![index]!.username!.toString(),
-                  //         Name: portalListModel!.data![index]!.name!.toString(),
-                  //         Username: portalListModel!.data![index]!.username!.toString(),
-                  //         Password: portalListModel!.data![index]!.password!.toString(),
-                  //         Url: portalListModel!.data![index]!.url!.toString(),
-                  //         Host: portalListModel!.data![index]!.host!.toString(),
-                  //         Port: portalListModel!.data![index]!.port!.toString(),
-                  //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
-                  //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
-                  //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
-                  //       )),
-                  // );
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: groupName,)));
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: sh_white,
-                          border: Border.all(
-                              color: sh_app_black, width: 1.0)),
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.fromLTRB(8.0, 8, 8, 8),
-                        child: ListTile(
-                          title: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Customer : " +
-                                          listResortModel2![index]!
-                                              .customerName!,
-                                      style: TextStyle(
-                                          color: sh_app_txt_color,
-                                          fontSize: 16,
-                                          fontFamily: 'Bold'),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      "Portal : " +
-                                          listResortModel2![index]!
-                                              .portalName!,
-                                      style: TextStyle(
-                                          color: sh_app_txt_color,
-                                          fontSize: 15,
-                                          fontFamily: 'Bold'),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      listResortModel2![index]!
-                                          .restoreId ==
-                                          null
-                                          ? ''
-                                          : "Restored Id : " +
-                                          listResortModel2![index]!
-                                              .restoreId!.toString(),
-                                      style: TextStyle(
-                                          color: sh_app_txt_color,
-                                          fontSize: 15,
-                                          fontFamily: 'Bold'),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    SetRestoreDate(index),
-                                    // Text(
-                                    //   listResortModel2![index]!
-                                    //       .restoreTime ==
-                                    //       null
-                                    //       ? ''
-                                    //       : "Restored at : " +
-                                    //       listResortModel2![index]!
-                                    //           .restoreTime!,
-                                    //   style: TextStyle(
-                                    //       color: sh_app_txt_color,
-                                    //       fontSize: 15,
-                                    //       fontFamily: 'Bold'),
-                                    // ),
-                                    SizedBox(
-                                      height: 14,
-                                    ),
-                                    // Text(
-                                    //   listResortModel!.data![index]!
-                                    //       .message ==
-                                    //       null ? '' :
-                                    //   listResortModel!.data![index]!
-                                    //       .message!,
-                                    //   style: TextStyle(
-                                    //       color: sh_green,
-                                    //       fontSize: 15,
-                                    //       fontFamily: 'Bold'),
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 4,
-                                    // ),
-                                    StepList2(index),
-                                    // Stepper(
-                                    //   physics: ClampingScrollPhysics(),
-                                    //   currentStep: this.current_step,
-                                    //   controlsBuilder: (context, _) {
-                                    //     return Row(
-                                    //       children: <Widget>[
-                                    //         Container(),
-                                    //         Container(),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    //   steps: steps,
-                                    //   type: StepperType.vertical,
-                                    //
-                                    // ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    )
-                  ],
-                ),
-              );
-            }),
-        onRefresh: _getData,
-      ):
-      Container(
-        height: height * .5,
-        child: Center(
-          child: Text(
-            'No Data Found',
-            style: TextStyle(
-                fontSize: 20,
-                color: sh_app_black,
-                fontFamily: 'Bold',
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: sh_white,
       body: Container(
@@ -1524,7 +1303,170 @@ class _RestoreFragmentState extends State<RestoreFragment> {
           height: height,
           color: sh_white,
           padding: EdgeInsets.all(8),
-          child: _buildList()),
+          child: FutureBuilder<RestoreListModel?>(
+            future: fetchRestore(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (listResortModel!.data!.length == 0) {
+                  return Container(
+                    height: height * .5,
+                    child: Center(
+                      child: Text(
+                        'No Data Found',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: sh_app_black,
+                            fontFamily: 'Bold',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: listResortModel!.data!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => EditPortalScreen(
+                            //         PortalId: portalListModel!.data![index]!.id.toString(),
+                            //         CustomerId: portalListModel!.data![index]!.userId!.toString(),
+                            //         UserIdName: portalListModel!.data![index]!.username!.toString(),
+                            //         Name: portalListModel!.data![index]!.name!.toString(),
+                            //         Username: portalListModel!.data![index]!.username!.toString(),
+                            //         Password: portalListModel!.data![index]!.password!.toString(),
+                            //         Url: portalListModel!.data![index]!.url!.toString(),
+                            //         Host: portalListModel!.data![index]!.host!.toString(),
+                            //         Port: portalListModel!.data![index]!.port!.toString(),
+                            //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
+                            //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
+                            //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
+                            //       )),
+                            // );
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: groupName,)));
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: sh_white,
+                                    border: Border.all(
+                                        color: sh_app_black, width: 1.0)),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8.0, 8, 8, 8),
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Customer : " +
+                                                    listResortModel!
+                                                        .data![index]!
+                                                        .customerName!,
+                                                style: TextStyle(
+                                                    color: sh_app_txt_color,
+                                                    fontSize: 16,
+                                                    fontFamily: 'Bold'),
+                                              ),
+                                              SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                "Portal : " +
+                                                    listResortModel!
+                                                        .data![index]!
+                                                        .portalName!,
+                                                style: TextStyle(
+                                                    color: sh_app_txt_color,
+                                                    fontSize: 15,
+                                                    fontFamily: 'Bold'),
+                                              ),
+                                              SizedBox(
+                                                height: 4,
+                                              ),
+                                              Text(
+                                                listResortModel!.data![index]!
+                                                            .restoreTime ==
+                                                        null
+                                                    ? ''
+                                                    : "Backup : " +
+                                                        listResortModel!
+                                                            .data![index]!
+                                                            .restoreTime!,
+                                                style: TextStyle(
+                                                    color: sh_app_txt_color,
+                                                    fontSize: 15,
+                                                    fontFamily: 'Bold'),
+                                              ),
+                                              SizedBox(
+                                                height: 14,
+                                              ),
+                                              // Text(
+                                              //   listResortModel!.data![index]!
+                                              //       .message ==
+                                              //       null ? '' :
+                                              //   listResortModel!.data![index]!
+                                              //       .message!,
+                                              //   style: TextStyle(
+                                              //       color: sh_green,
+                                              //       fontSize: 15,
+                                              //       fontFamily: 'Bold'),
+                                              // ),
+                                              // SizedBox(
+                                              //   height: 4,
+                                              // ),
+                                              StepList2(index),
+                                              // Stepper(
+                                              //   physics: ClampingScrollPhysics(),
+                                              //   currentStep: this.current_step,
+                                              //   controlsBuilder: (context, _) {
+                                              //     return Row(
+                                              //       children: <Widget>[
+                                              //         Container(),
+                                              //         Container(),
+                                              //       ],
+                                              //     );
+                                              //   },
+                                              //   steps: steps,
+                                              //   type: StepperType.vertical,
+                                              //
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 12,
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                }
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              // By default, show a loading spinner.
+              return Center(child: CircularProgressIndicator());
+            },
+          )),
     );
   }
 }

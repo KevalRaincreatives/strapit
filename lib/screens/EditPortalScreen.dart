@@ -11,6 +11,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/CustomerListModel.dart';
 import 'package:strapit/models/PortalAddFailModel.dart';
 import 'package:strapit/models/PortalAddModel.dart';
+import 'package:strapit/models/PortalTypeModel.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
@@ -48,6 +49,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
   PortalAddModel? portalAddModel;
   PortalAddFailModel? portalAddFailModel;
   bool _showPassword = false;
+  bool _showPasswordMySql = false;
   String? pickdate='', pickmonth='', pickyear='';
   String? pickenddate='', pickendmonth='', pickendyear='';
   var mysqlusernameCont = TextEditingController();
@@ -62,6 +64,12 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
   DateTime selectedDate = DateTime.now();
   DateTime selectedendDate = DateTime.now();
   CustomerListModel? customerListModel;
+  Future<PortalTypeModel?>? portaltypedetail;
+  PortalTypeModel? portalTypeModel;
+  PortalTypeModelDataPortalTypes? selectedValue;
+  String portal_type='';
+  int? IsAdmin;
+  String? UserName='';
 
   void initState() {
     super.initState();
@@ -285,9 +293,17 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       String mysqlhost=mysqlhostCont.text;
       String mysqldatabase=mysqldatabaseCont.text;
 
+      // toast(customerListModel!.data![selectedAddressIndex]!.id.toString()+ " , "+portal_type);
+      String useridPortal='';
+      IsAdmin=prefs.getInt("IsAdmin");
+      if(IsAdmin==1) {
+        useridPortal =customerListModel!.data![selectedAddressIndex]!.id.toString();
+      }else{
+        useridPortal=widget.CustomerId!;
+      }
       final msg = jsonEncode({"id":widget.PortalId,"username": username,"mysql_username":mysqlusername, "password": password,"mysql_password": mysqlpassword, "confirm_password": password,
         "name": name, "url": url, "port": port,"mysql_port":mysqlport, "root_folder": folder,"host":host,"mysql_host":mysqlhost,"mysql_database":mysqldatabase,
-        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":widget.CustomerId,"portal_type":widget.PortalType});
+        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":useridPortal,"portal_type":portal_type});
 
       print("chhhh"+msg);
 
@@ -479,35 +495,6 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
     }
   }
 
-  Future<CustomerListModel?> fetchCustomer() async {
-    try {
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      // String UserId = prefs.getString('UserId');
-      String? token = prefs.getString('token');
-      // add_from=prefs.getString("from");
-
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-
-
-      Response response =
-      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listCustomers'), headers: headers);
-
-      final jsonResponse = json.decode(response.body);
-      print('not json $jsonResponse');
-      customerListModel = new CustomerListModel.fromJson(jsonResponse);
-      // print(_addressModel!.data);
-
-
-      return customerListModel;
-    } catch (e) {
-      print('caught error $e');
-    }
-  }
 
   Future<String?> fetchadd() async {
     try {
@@ -627,11 +614,100 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       mysqldatabaseCont.text=widget.mysqlDatabase!;
       portaltypeCont.text=widget.PortalType!;
 
-
-
+      // portaltypedetail = fetchPortalType();
+      UserName=prefs.getString("UserName");
+      IsAdmin=prefs.getInt("IsAdmin");
+      if(IsAdmin==1) {
+        fetchCustomer();
+      }else{
+        portaltypedetail = fetchPortalType();
+      }
 
       return '';
     } catch (e) {
+      print('caught error $e');
+    }
+  }
+
+  Future<CustomerListModel?> fetchCustomer() async {
+    EasyLoading.show(status: 'Please wait...');
+    try {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // String UserId = prefs.getString('UserId');
+      String? token = prefs.getString('token');
+      // add_from=prefs.getString("from");
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+
+      Response response =
+      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listCustomers'), headers: headers);
+
+      final jsonResponse = json.decode(response.body);
+      print('not json $jsonResponse');
+      customerListModel = new CustomerListModel.fromJson(jsonResponse);
+      String gg=widget.UserIdName!;
+      print(gg);
+      for (var i = 0; i < customerListModel!.data!.length; i++) {
+        if (customerListModel!.data![i]!.name == gg) {
+          selectedUserIndex = i;
+          selectedAddressIndex=i;
+        }
+      }
+      EasyLoading.dismiss();
+      portaltypedetail = fetchPortalType();
+
+      return customerListModel;
+    } catch (e) {
+      EasyLoading.dismiss();
+      print('caught error $e');
+    }
+  }
+
+
+  Future<PortalTypeModel?> fetchPortalType() async {
+    EasyLoading.show(status: 'Please wait...');
+    try {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // String UserId = prefs.getString('UserId');
+      String? token = prefs.getString('token');
+      // add_from=prefs.getString("from");
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+
+      Response response =
+      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listPortalTypes'), headers: headers);
+
+      final jsonResponse = json.decode(response.body);
+      print('not json $jsonResponse');
+      portalTypeModel = new PortalTypeModel.fromJson(jsonResponse);
+      // print(_addressModel!.data);
+
+      for (var i = 0; i < portalTypeModel!.data!.portalTypes!.length; i++) {
+        if (portalTypeModel!.data!.portalTypes![i]!.type == widget.PortalType) {
+          selectedValue = portalTypeModel!.data!.portalTypes![i];
+          portal_type=portalTypeModel!.data!.portalTypes![i]!.type!;
+        }
+      }
+      EasyLoading.dismiss();
+      setState(() {
+
+      });
+
+      return portalTypeModel;
+    } catch (e) {
+      EasyLoading.dismiss();
       print('caught error $e');
     }
   }
@@ -791,30 +867,59 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
     }
 
     UserSelection(){
-
-        String userss=widget.Username!;
+      if(IsAdmin==1) {
+        // String userss=widget.Username!;
+        String userss = customerListModel!.data![selectedUserIndex]!.name!;
 
         return InkWell(
-          onTap: () async{
-            // ShowDlg2();
-
-
+          onTap: () async {
+            ShowDlg2();
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(
-                spacing_standard_new,16,
-                spacing_standard_new,16),
+                spacing_standard_new, 16,
+                spacing_standard_new, 16),
             decoration:
             BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("User Name\n$userss",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
+                Text("User Name\n$userss", style: TextStyle(
+                    color: sh_app_txt_color,
+                    fontSize: 16,
+                    fontFamily: 'Bold'),),
+                Icon(Icons.keyboard_arrow_right)
               ],
             ),
           ),
         );
+      }else{
 
+        String userss=widget.Username!;
+        // String userss = customerListModel!.data![selectedUserIndex]!.name!;
+
+        return InkWell(
+          onTap: () async {
+            // ShowDlg2();
+          },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(
+                spacing_standard_new, 16,
+                spacing_standard_new, 16),
+            decoration:
+            BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("User Name\n$UserName", style: TextStyle(
+                    color: sh_app_txt_color,
+                    fontSize: 16,
+                    fontFamily: 'Bold'),),
+              ],
+            ),
+          ),
+        );
+      }
     }
 
 
@@ -883,40 +988,80 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                           spacing_standard_new,2),
                       decoration:
                       BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          TextFormField(
-                            onEditingComplete: () =>
-                                node.nextFocus(),
-                            enabled: false,
-                            controller: portaltypeCont,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Please Enter Username';
-                              }
-                              return null;
-                            },
-                            cursorColor: sh_app_txt_color,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                              hintText: "Portal Type",
-                              hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                              labelText: "Portal Type",
-                              labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                              ),
+                          Flexible(
+                            child: DropdownButton<PortalTypeModelDataPortalTypes?>(
+                              underline: Container(),
+                              // decoration: InputDecoration(
+                              //     labelText: 'Change Country'
+                              // ),
+                              isExpanded: true,
+                              items: portalTypeModel!.data!.portalTypes!.map((item) {
+                                return new DropdownMenuItem(
+                                  child: Text(
+                                      item!.value!,
+                                      style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold')
+                                  ),
+                                  value: item,
+                                );
+                              }).toList(),
+                              hint: Text('Select Portal Type',style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold')),
+                              value: selectedValue,
+                              onChanged: (PortalTypeModelDataPortalTypes? newVal) async{
+// toast(newVal!.type);
+                                setState(() {
+                                  selectedValue = newVal;
+                                  portal_type = newVal!.type!;
+
+                                });
+                              },
                             ),
-                            maxLines: 1,
-                            style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
                           ),
                         ],
                       ),
                     ),
+                    // Container(
+                    //   padding: EdgeInsets.fromLTRB(
+                    //       spacing_standard_new,2,
+                    //       spacing_standard_new,2),
+                    //   decoration:
+                    //   BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: <Widget>[
+                    //       TextFormField(
+                    //         onEditingComplete: () =>
+                    //             node.nextFocus(),
+                    //         enabled: false,
+                    //         controller: portaltypeCont,
+                    //         validator: (text) {
+                    //           if (text == null || text.isEmpty) {
+                    //             return 'Please Enter Username';
+                    //           }
+                    //           return null;
+                    //         },
+                    //         cursorColor: sh_app_txt_color,
+                    //         decoration: InputDecoration(
+                    //           contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                    //           hintText: "Portal Type",
+                    //           hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                    //           labelText: "Portal Type",
+                    //           labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                    //           enabledBorder: UnderlineInputBorder(
+                    //             borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                    //           ),
+                    //           focusedBorder: UnderlineInputBorder(
+                    //             borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                    //           ),
+                    //         ),
+                    //         maxLines: 1,
+                    //         style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     SizedBox(height: 12,),
                     Form(
                       key: _formKey2,
@@ -1349,6 +1494,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                                     onEditingComplete: () =>
                                         node.nextFocus(),
                                     controller: mysqlpasswordCont,
+                                    obscureText: !this._showPasswordMySql,
                                     validator: (text) {
                                       if (text == null || text.isEmpty) {
                                         return 'Please Enter MySql Password';
@@ -1360,6 +1506,15 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                                       contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
                                       hintText: "MySql Password",
                                       hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          Icons.remove_red_eye,
+                                          color: this._showPasswordMySql ? sh_colorPrimary2 : Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          setState(() => this._showPasswordMySql = !this._showPasswordMySql);
+                                        },
+                                      ),
                                       labelText: "MySql Password",
                                       labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
                                       enabledBorder: UnderlineInputBorder(
@@ -1542,8 +1697,8 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                     InkWell(
                       onTap: () async {
 
+                        // toast(customerListModel!.data![selectedAddressIndex]!.id.toString()+ " , "+portal_type);
                         getAddPortal();
-// MyCheck();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,

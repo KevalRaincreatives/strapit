@@ -179,6 +179,118 @@ class _MyPortalScreenState extends State<MyPortalScreen> {
       }
     }
 
+    SetStartDate(int index){
+      if(portalListModel!.data![index]!.planStartDate != null) {
+        var inputFormat = DateFormat("yyyy-MM-dd");
+
+        String date1 = inputFormat.parse(
+            portalListModel!.data![index]!.planStartDate!).toString();
+        DateTime dateTime = DateTime.parse(date1);
+        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+
+        String date2 = outputFormat.toString();
+        return Text(portalListModel!.data![index]!
+            .planStartDate == null ? '' :
+        "Start Date : " + date2,
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }else{
+        return Text('',
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }
+    }
+
+    SetEndDate(int index){
+      if(portalListModel!.data![index]!.planEndDate != null) {
+        var inputFormat = DateFormat("yyyy-MM-dd");
+
+        String date1 = inputFormat.parse(
+            portalListModel!.data![index]!.planEndDate!).toString();
+        DateTime dateTime = DateTime.parse(date1);
+        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+
+        String date2 = outputFormat.toString();
+        return Text(portalListModel!.data![index]!
+            .planEndDate == null ? '' :
+        "End Date : " + date2,
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }else{
+        return Text('',
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }
+    }
+
+    SetStartCustomerDate(int index){
+      if(portalListCustomerModel!.data![index]!.planStartDate != null) {
+        var inputFormat = DateFormat("yyyy-MM-dd");
+
+        String date1 = inputFormat.parse(
+            portalListCustomerModel!.data![index]!.planStartDate!).toString();
+        DateTime dateTime = DateTime.parse(date1);
+        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+
+        String date2 = outputFormat.toString();
+        return Text(portalListCustomerModel!.data![index]!
+            .planStartDate == null ? '' :
+        "Start Date : " + date2,
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }else{
+        return Text('',
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }
+    }
+
+    SetEndCustomerDate(int index){
+      if(portalListCustomerModel!.data![index]!.planEndDate != null) {
+        var inputFormat = DateFormat("yyyy-MM-dd");
+
+        String date1 = inputFormat.parse(
+            portalListCustomerModel!.data![index]!.planEndDate!).toString();
+        DateTime dateTime = DateTime.parse(date1);
+        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+
+        String date2 = outputFormat.toString();
+        return Text(portalListCustomerModel!.data![index]!
+            .planEndDate == null ? '' :
+        "End Date : " + date2,
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }else{
+        return Text('',
+          style: TextStyle(
+              color: sh_app_txt_color,
+              fontSize: 15,
+              fontFamily: 'Bold'),
+        );
+      }
+    }
+
     return FutureBuilder<int?>(
       future: fetchadd(),
       builder: (context, snapshot) {
@@ -346,25 +458,6 @@ else {
           if (editingController.text.isEmpty) {
             return GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => EditPortalScreen(
-                //         PortalId: portalListModel!.data![index]!.id.toString(),
-                //           CustomerId: portalListModel!.data![index]!.userId!.toString(),
-                //           UserIdName: portalListModel!.data![index]!.username!.toString(),
-                //         Name: portalListModel!.data![index]!.name!.toString(),
-                //         Username: portalListModel!.data![index]!.username!.toString(),
-                //         Password: portalListModel!.data![index]!.password!.toString(),
-                //         Url: portalListModel!.data![index]!.url!.toString(),
-                //         Host: portalListModel!.data![index]!.host!.toString(),
-                //         Port: portalListModel!.data![index]!.port!.toString(),
-                //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
-                //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
-                //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
-                //       )),
-                // );
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListModel!.data![index]!.id.toString(),)));
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -422,28 +515,30 @@ else {
                             SizedBox(
                               height: 4,
                             ),
-                            Text(portalListModel!.data![index]!
-                                .planStartDate == null ? '' :
-                            "Start Date : " + portalListModel!.data![index]!
-                                .planStartDate!,
-                              style: TextStyle(
-                                  color: sh_app_txt_color,
-                                  fontSize: 15,
-                                  fontFamily: 'Bold'),
-                            ),
+                            SetStartDate(index),
+                            // Text(portalListModel!.data![index]!
+                            //     .planStartDate == null ? '' :
+                            // "Start Date : " + portalListModel!.data![index]!
+                            //     .planStartDate!,
+                            //   style: TextStyle(
+                            //       color: sh_app_txt_color,
+                            //       fontSize: 15,
+                            //       fontFamily: 'Bold'),
+                            // ),
                             SizedBox(
                               height: 4,
                             ),
-                            Text(
-                              portalListModel!.data![index]!.planEndDate ==
-                                  null ? '' :
-                              "End Date : " + portalListModel!.data![index]!
-                                  .planEndDate!,
-                              style: TextStyle(
-                                  color: sh_app_txt_color,
-                                  fontSize: 15,
-                                  fontFamily: 'Bold'),
-                            ),
+                            SetEndDate(index),
+                            // Text(
+                            //   portalListModel!.data![index]!.planEndDate ==
+                            //       null ? '' :
+                            //   "End Date : " + portalListModel!.data![index]!
+                            //       .planEndDate!,
+                            //   style: TextStyle(
+                            //       color: sh_app_txt_color,
+                            //       fontSize: 15,
+                            //       fontFamily: 'Bold'),
+                            // ),
                             SizedBox(
                               height: 4,
                             ),
@@ -509,7 +604,7 @@ else {
                                                       .data![index]!.userId!
                                                       .toString(),
                                                   UserIdName: portalListModel!
-                                                      .data![index]!.username!
+                                                      .data![index]!.customerName!
                                                       .toString(),
                                                   Name: portalListModel!
                                                       .data![index]!
@@ -563,7 +658,8 @@ else {
                                                       .data![index]!.portal_type!
                                                       .toString(),
                                                 )),
-                                      );
+                                      ).then((_) =>
+                                          setState(() {}));
                                     },
                                     child: Container(
                                       padding: EdgeInsets.all(4.0),
@@ -760,7 +856,7 @@ else {
                                                       .data![index]!.userId!
                                                       .toString(),
                                                   UserIdName: portalListModel!
-                                                      .data![index]!.username!
+                                                      .data![index]!.customerName!
                                                       .toString(),
                                                   Name: portalListModel!
                                                       .data![index]!
@@ -812,7 +908,8 @@ else {
                                                   PortalType: portalListModel!.data![index]!.portal_type==null?"":
                                                   portalListModel!.data![index]!.portal_type,
                                                 )),
-                                      );
+                                      ).then((_) =>
+                                          setState(() {}));
                                     },
                                     child: Container(
                                       padding: EdgeInsets.all(4.0),
@@ -977,25 +1074,6 @@ else {
     if (editingController.text.isEmpty) {
       return GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => EditPortalScreen(
-          //         PortalId: portalListModel!.data![index]!.id.toString(),
-          //           CustomerId: portalListModel!.data![index]!.userId!.toString(),
-          //           UserIdName: portalListModel!.data![index]!.username!.toString(),
-          //         Name: portalListModel!.data![index]!.name!.toString(),
-          //         Username: portalListModel!.data![index]!.username!.toString(),
-          //         Password: portalListModel!.data![index]!.password!.toString(),
-          //         Url: portalListModel!.data![index]!.url!.toString(),
-          //         Host: portalListModel!.data![index]!.host!.toString(),
-          //         Port: portalListModel!.data![index]!.port!.toString(),
-          //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
-          //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
-          //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
-          //       )),
-          // );
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListModel!.data![index]!.id.toString(),)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1042,28 +1120,30 @@ else {
                       SizedBox(
                         height: 4,
                       ),
-                      Text(portalListCustomerModel!.data![index]!
-                          .planStartDate == null ? '' :
-                      "Start Date : " + portalListCustomerModel!.data![index]!
-                          .planStartDate!,
-                        style: TextStyle(
-                            color: sh_app_txt_color,
-                            fontSize: 15,
-                            fontFamily: 'Bold'),
-                      ),
+                      SetStartCustomerDate(index),
+                      // Text(portalListCustomerModel!.data![index]!
+                      //     .planStartDate == null ? '' :
+                      // "Start Date : " + portalListCustomerModel!.data![index]!
+                      //     .planStartDate!,
+                      //   style: TextStyle(
+                      //       color: sh_app_txt_color,
+                      //       fontSize: 15,
+                      //       fontFamily: 'Bold'),
+                      // ),
                       SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        portalListCustomerModel!.data![index]!.planEndDate ==
-                            null ? '' :
-                        "End Date : " + portalListCustomerModel!.data![index]!
-                            .planEndDate!,
-                        style: TextStyle(
-                            color: sh_app_txt_color,
-                            fontSize: 15,
-                            fontFamily: 'Bold'),
-                      ),
+                      SetEndCustomerDate(index),
+                      // Text(
+                      //   portalListCustomerModel!.data![index]!.planEndDate ==
+                      //       null ? '' :
+                      //   "End Date : " + portalListCustomerModel!.data![index]!
+                      //       .planEndDate!,
+                      //   style: TextStyle(
+                      //       color: sh_app_txt_color,
+                      //       fontSize: 15,
+                      //       fontFamily: 'Bold'),
+                      // ),
                       SizedBox(
                         height: 8,
                       ),
@@ -1161,7 +1241,8 @@ else {
                                                 .data![index]!.portal_type!
                                                 .toString(),
                                           )),
-                                );
+                                ).then((_) =>
+                                    setState(() {}));
                               },
                               child: Container(
                                 padding: EdgeInsets.all(4.0),
@@ -1368,7 +1449,8 @@ else {
                                             PortalType: portalListCustomerModel!.data![index]!.portal_type==null?"":
                                             portalListCustomerModel!.data![index]!.portal_type,
                                           )),
-                                );
+                                ).then((_) =>
+                                    setState(() {}));
                               },
                               child: Container(
                                 padding: EdgeInsets.all(4.0),

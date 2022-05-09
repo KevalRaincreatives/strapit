@@ -11,21 +11,27 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/CustomerListModel.dart';
 import 'package:strapit/models/PortalAddFailModel.dart';
 import 'package:strapit/models/PortalAddModel.dart';
-import 'package:strapit/models/PortalTypeModel.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
 import 'package:http/http.dart'as http;
 import 'package:http/http.dart';
-class AddPortalScreen extends StatefulWidget {
-  static String tag='/AddPortalScreen';
-  const AddPortalScreen({Key? key}) : super(key: key);
+
+class EditPortalScreen extends StatefulWidget {
+  static String tag='/EditPortalScreen';
+  final String? PortalId,CustomerId,UserIdName,Name,Username,Password,Url,Host,Port,RootFolder,StartDate,EndDate,PortalType;
+  final String? mysqlUsername,mysqlPassword,mysqlHost,mysqlPort,mysqlDatabase;
+
+  EditPortalScreen({this.PortalId,this.CustomerId,this.UserIdName,this.Name,this.Username,this.Password,this.Url,this.Host,this.Port,this.RootFolder,this.StartDate,this.EndDate,
+  this.mysqlUsername,this.mysqlPassword,this.mysqlHost,this.mysqlPort,this.mysqlDatabase,this.PortalType});
+  // const EditPortalScreen({Key? key}) : super(key: key);
 
   @override
-  _AddPortalScreenState createState() => _AddPortalScreenState();
+  _EditPortalScreenState createState() => _EditPortalScreenState();
 }
 
-class _AddPortalScreenState extends State<AddPortalScreen> {
+class _EditPortalScreenState extends State<EditPortalScreen> {
+  var portaltypeCont = TextEditingController();
   var usernameCont = TextEditingController();
   var passwordCont = TextEditingController();
   var portCont = TextEditingController();
@@ -33,6 +39,7 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
   var folderCont= TextEditingController();
   var urlCont = TextEditingController();
   var hostCont = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -41,6 +48,7 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
   PortalAddModel? portalAddModel;
   PortalAddFailModel? portalAddFailModel;
   bool _showPassword = false;
+  bool _showPasswordMySql = false;
   String? pickdate='', pickmonth='', pickyear='';
   String? pickenddate='', pickendmonth='', pickendyear='';
   var mysqlusernameCont = TextEditingController();
@@ -48,125 +56,19 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
   var mysqlportCont = TextEditingController();
   var mysqlhostCont = TextEditingController();
   var mysqldatabaseCont = TextEditingController();
-  bool _showPasswordMySql = false;
+
 
   Country _selectedDialogCountry =  CountryPickerUtils.getCountryByPhoneCode('1-246');
 
   DateTime selectedDate = DateTime.now();
   DateTime selectedendDate = DateTime.now();
   CustomerListModel? customerListModel;
-  Future<PortalTypeModel?>? portaltypedetail;
-  PortalTypeModel? portalTypeModel;
-  PortalTypeModelDataPortalTypes? selectedValue;
-  String portal_type='';
 
   void initState() {
     super.initState();
-    fetchCustomer();
-    portaltypedetail = fetchPortalType();
+    fetchadd();
+    // fetchCustomer();
     // disableCapture();
-    initdatevalidation();
-    initEnddatevalidation();
-
-  }
-  initdatevalidation(){
-    var yearString = DateFormat.yMMMMd('en_US')
-        .format(selectedDate)
-        .substring(DateFormat.yMMMMd('en_US')
-        .format(selectedDate)
-        .length -
-        4);
-    var monthstr;
-    var datestr;
-
-    if (DateFormat.yMMMMd('en_US').format(selectedDate) !=
-        null &&
-        DateFormat.yMMMMd('en_US')
-            .format(selectedDate)
-            .length >=
-            6) {
-      datestr = DateFormat.yMMMMd('en_US')
-          .format(selectedDate)
-          .substring(
-          0,
-          DateFormat.yMMMMd('en_US')
-              .format(selectedDate)
-              .length -
-              6);
-      datestr = datestr.substring(datestr.length - 2);
-
-    }
-
-    if (DateFormat.yMMMMd('en_US').format(selectedDate) !=
-        null &&
-        DateFormat.yMMMMd('en_US')
-            .format(selectedDate)
-            .length >=
-            8) {
-      monthstr = DateFormat.yMMMMd('en_US')
-          .format(selectedDate)
-          .substring(
-          0,
-          DateFormat.yMMMMd('en_US')
-              .format(selectedDate)
-              .length -
-              8);
-    }
-
-    pickdate = datestr;
-    pickmonth = monthstr;
-    pickyear = yearString;
-  }
-
-  initEnddatevalidation(){
-    selectedendDate = DateTime(selectedDate.year+1,selectedDate.month,selectedDate.day);
-
-    var yearString = DateFormat.yMMMMd('en_US')
-        .format(selectedendDate)
-        .substring(DateFormat.yMMMMd('en_US')
-        .format(selectedendDate)
-        .length -
-        4);
-    var monthstr;
-    var datestr;
-
-    if (DateFormat.yMMMMd('en_US').format(selectedendDate) !=
-        null &&
-        DateFormat.yMMMMd('en_US')
-            .format(selectedendDate)
-            .length >=
-            6) {
-      datestr = DateFormat.yMMMMd('en_US')
-          .format(selectedendDate)
-          .substring(
-          0,
-          DateFormat.yMMMMd('en_US')
-              .format(selectedendDate)
-              .length -
-              6);
-      datestr = datestr.substring(datestr.length - 2);
-
-    }
-
-    if (DateFormat.yMMMMd('en_US').format(selectedendDate) !=
-        null &&
-        DateFormat.yMMMMd('en_US')
-            .format(selectedendDate)
-            .length >=
-            8) {
-      monthstr = DateFormat.yMMMMd('en_US')
-          .format(selectedendDate)
-          .substring(
-          0,
-          DateFormat.yMMMMd('en_US')
-              .format(selectedendDate)
-              .length -
-              8);
-    }
-
-    pickenddate = datestr;
-    pickendmonth = monthstr;
-    pickendyear = yearString;
   }
 
   _selectDate(BuildContext context) async {
@@ -181,6 +83,9 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
       setState(() {
         selectedDate = selected;
         // toast(selectedDate.toString().substring(0, 10));
+
+
+
 
         var yearString = DateFormat.yMMMMd('en_US')
             .format(selectedDate)
@@ -229,9 +134,11 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
         pickmonth = monthstr;
         pickyear = yearString;
 
-//end date change by 1 year
+        //end date change by 1 year
 
         selectedendDate = DateTime(selectedDate.year+1,selectedDate.month,selectedDate.day);
+
+
 
         var yearString2 = DateFormat.yMMMMd('en_US')
             .format(selectedendDate)
@@ -279,7 +186,6 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
         pickenddate = datestr2;
         pickendmonth = monthstr2;
         pickendyear = yearString2;
-
       });
   }
 
@@ -342,12 +248,18 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
         pickenddate = datestr;
         pickendmonth = monthstr;
         pickendyear = yearString;
+
+
+
+
       });
   }
 
   Future<String?> getAddPortal() async {
     EasyLoading.show(status: 'Please wait...');
     try {
+
+
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       // String UserId = prefs.getString('UserId');
@@ -360,22 +272,32 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
         'Authorization': 'Bearer $token',
       };
 
-      final msg = jsonEncode({"username": usernameCont.text,"mysql_username":mysqlusernameCont.text, "password": passwordCont.text,"mysql_password": mysqlpasswordCont.text, "confirm_password": passwordCont.text,
-        "name": nameCont.text, "url": urlCont.text, "port": portCont.text,"mysql_port":mysqlportCont.text, "root_folder": folderCont.text,"host":hostCont.text,"mysql_host":mysqlhostCont.text,"mysql_database":mysqldatabaseCont.text,
-        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":customerListModel!.data![selectedAddressIndex]!.id.toString(),"portal_type":portal_type});
+      String name=nameCont.text;
+      String url=urlCont.text;
+      String username=usernameCont.text;
+      String port=portCont.text;
+      String password=passwordCont.text;
+      String folder=folderCont.text;
+      String host=hostCont.text;
 
-      // final msg = jsonEncode({"username": "mocorcs","mysql_username":"mocorcs_mocousr", "password": "vpEdZ3PUiG8D","mysql_password": "ufQ3sZyIusm5", "confirm_password": "vpEdZ3PUiG8D",
-      //   "name": nameCont.text, "url": "moco.rcstaging.co.in", "port": "8853","mysql_port":"3306", "root_folder": "public_html","host":"localhost","mysql_host":"localhost","mysql_database":"mocorcs_mocodb",
-      //   "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":customerListModel!.data![selectedAddressIndex]!.id.toString(),"portal_type":"wordpress"});
+      String mysqlusername=mysqlusernameCont.text;
+      String mysqlport=mysqlportCont.text;
+      String mysqlpassword=mysqlpasswordCont.text;
+      String mysqlhost=mysqlhostCont.text;
+      String mysqldatabase=mysqldatabaseCont.text;
 
-      print(msg);
+      final msg = jsonEncode({"id":widget.PortalId,"username": username,"mysql_username":mysqlusername, "password": password,"mysql_password": mysqlpassword, "confirm_password": password,
+        "name": name, "url": url, "port": port,"mysql_port":mysqlport, "root_folder": folder,"host":host,"mysql_host":mysqlhost,"mysql_database":mysqldatabase,
+        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":widget.CustomerId,"portal_type":widget.PortalType});
+
+      print("chhhh"+msg);
 
       final client = RetryClient(http.Client());
       var response;
       try {
         response=await client.post(
             Uri.parse(
-                'https://strapit.rcstaging.co.in/strapit/public/api/addPortal'),
+                'https://strapit.rcstaging.co.in/strapit/public/api/editPortal'),
             headers: headers,
             body: msg);
       } finally {
@@ -390,27 +312,10 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
       if (response.statusCode == 200) {
         //
         portalAddModel = new PortalAddModel.fromJson(jsonResponse);
-        // print("cat dta$cat_model");
-        //
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // prefs.setString('token', cat_model!.data!.token.toString());
-        // prefs.setString('UserName', cat_model!.data!.name.toString());
-        // prefs.setString('UserEmail', cat_model!.data!.email.toString());
-        // prefs.setString('UserCountry', cat_model!.data!.country!);
-        // prefs.setString('UserPhone', cat_model!.data!.phone!);
-        //
-        //
-        // prefs.setInt('IsAdmin', cat_model!.data!.isAdmin!);
-        // // prefs.setString('OrderUserEmail', cat_model!.data!.userEmail!);
-        // prefs.commit();
-        // MyCheck();
         EasyLoading.dismiss();
-        // if(signUpModel!.message==1){
-        //   launchScreen(context, AdminDashoardScreen.tag);
-        // }
 
         toast(portalAddModel!.message);
-Navigator.pop(context);
+        Navigator.pop(context);
         print('sucess');
       } else {
         EasyLoading.dismiss();
@@ -424,66 +329,6 @@ Navigator.pop(context);
       return "cat_model";
     } catch (e) {
       EasyLoading.dismiss();
-      print('caught error $e');
-    }
-  }
-
-  Future<CustomerListModel?> fetchCustomer() async {
-    try {
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      // String UserId = prefs.getString('UserId');
-      String? token = prefs.getString('token');
-      // add_from=prefs.getString("from");
-
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-
-
-      Response response =
-      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listCustomers'), headers: headers);
-
-      final jsonResponse = json.decode(response.body);
-      print('not json $jsonResponse');
-      customerListModel = new CustomerListModel.fromJson(jsonResponse);
-      // print(_addressModel!.data);
-
-
-      return customerListModel;
-    } catch (e) {
-      print('caught error $e');
-    }
-  }
-
-  Future<PortalTypeModel?> fetchPortalType() async {
-    try {
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      // String UserId = prefs.getString('UserId');
-      String? token = prefs.getString('token');
-      // add_from=prefs.getString("from");
-
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-
-
-      Response response =
-      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listPortalTypes'), headers: headers);
-
-      final jsonResponse = json.decode(response.body);
-      print('not json $jsonResponse');
-      portalTypeModel = new PortalTypeModel.fromJson(jsonResponse);
-      // print(_addressModel!.data);
-
-
-      return portalTypeModel;
-    } catch (e) {
       print('caught error $e');
     }
   }
@@ -503,9 +348,20 @@ Navigator.pop(context);
         'Authorization': 'Bearer $token',
       };
 
-      final msg = jsonEncode({"username": usernameCont.text, "password": passwordCont.text,
-         "url": urlCont.text, "port": portCont.text, "root_folder": folderCont.text,"host":hostCont.text,
-        "portal_type":portal_type});
+
+      String name=nameCont.text;
+      String url=urlCont.text;
+      String username=usernameCont.text;
+      String port=portCont.text;
+      String password=passwordCont.text;
+      String folder=folderCont.text;
+      String host=hostCont.text;
+
+
+
+      final msg = jsonEncode({"username": username, "password": password,
+        "url": url, "port": port, "root_folder": folder,"host":host,
+        "portal_type":widget.PortalType});
 
 
 
@@ -564,13 +420,25 @@ Navigator.pop(context);
         'Authorization': 'Bearer $token',
       };
 
-      final msg = jsonEncode({"username": usernameCont.text,"mysql_username":mysqlusernameCont.text, "password": passwordCont.text,"mysql_password": mysqlpasswordCont.text,
-        "name": nameCont.text, "url": urlCont.text, "port": portCont.text,"mysql_port":mysqlportCont.text, "root_folder": folderCont.text,"host":hostCont.text,"mysql_host":mysqlhostCont.text,"mysql_database":mysqldatabaseCont.text,
-        "portal_type":portal_type});
+      String name=nameCont.text;
+      String url=urlCont.text;
+      String username=usernameCont.text;
+      String port=portCont.text;
+      String password=passwordCont.text;
+      String folder=folderCont.text;
+      String host=hostCont.text;
 
-      // final msg = jsonEncode({"username": "mocorcs","mysql_username":"mocorcs_mocousr", "password": "vpEdZ3PUiG8D","mysql_password": "ufQ3sZyIusm5", "confirm_password": "vpEdZ3PUiG8D",
-      //   "name": nameCont.text, "url": "moco.rcstaging.co.in", "port": "8853","mysql_port":"3306", "root_folder": "public_html","host":"localhost","mysql_host":"localhost","mysql_database":"mocorcs_mocodb",
-      //   "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":customerListModel!.data![selectedAddressIndex]!.id.toString(),"portal_type":"wordpress"});
+      String mysqlusername=mysqlusernameCont.text;
+      String mysqlport=mysqlportCont.text;
+      String mysqlpassword=mysqlpasswordCont.text;
+      String mysqlhost=mysqlhostCont.text;
+      String mysqldatabase=mysqldatabaseCont.text;
+
+
+
+      final msg = jsonEncode({"username": username,"mysql_username":mysqlusername, "password": password,"mysql_password": mysqlpassword,
+         "url": url, "port": port,"mysql_port":mysqlport, "root_folder": folder,"host":host,"mysql_host":mysqlhost,"mysql_database":mysqldatabase,
+        "portal_type":widget.PortalType});
 
       print(msg);
 
@@ -585,7 +453,6 @@ Navigator.pop(context);
       } finally {
         client.close();
       }
-
 
 
       final jsonResponse = json.decode(response.body);
@@ -612,6 +479,164 @@ Navigator.pop(context);
       print('caught error $e');
     }
   }
+
+  Future<CustomerListModel?> fetchCustomer() async {
+    try {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      // String UserId = prefs.getString('UserId');
+      String? token = prefs.getString('token');
+      // add_from=prefs.getString("from");
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+
+
+      Response response =
+      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/listCustomers'), headers: headers);
+
+      final jsonResponse = json.decode(response.body);
+      print('not json $jsonResponse');
+      customerListModel = new CustomerListModel.fromJson(jsonResponse);
+      // print(_addressModel!.data);
+
+
+      return customerListModel;
+    } catch (e) {
+      print('caught error $e');
+    }
+  }
+
+  Future<String?> fetchadd() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final DateFormat format = new DateFormat("yyyy-MM-dd");
+
+      var yearString = DateFormat.yMMMMd('en_US')
+          .format(format.parse(widget.StartDate!))
+          .substring(DateFormat.yMMMMd('en_US')
+          .format(format.parse(widget.StartDate!))
+          .length -
+          4);
+      var monthstr;
+      var datestr;
+
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
+          null &&
+          DateFormat.yMMMMd('en_US')
+              .format(format.parse(widget.StartDate!))
+              .length >=
+              6) {
+        datestr = DateFormat.yMMMMd('en_US')
+            .format(format.parse(widget.StartDate!))
+            .substring(
+            0,
+            DateFormat.yMMMMd('en_US')
+                .format(format.parse(widget.StartDate!))
+                .length -
+                6);
+        datestr = datestr.substring(datestr.length - 2);
+
+      }
+
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
+          null &&
+          DateFormat.yMMMMd('en_US')
+              .format(format.parse(widget.StartDate!))
+              .length >=
+              8) {
+        monthstr = DateFormat.yMMMMd('en_US')
+            .format(format.parse(widget.StartDate!))
+            .substring(
+            0,
+            DateFormat.yMMMMd('en_US')
+                .format(format.parse(widget.StartDate!))
+                .length -
+                8);
+      }
+
+      pickdate = datestr;
+      pickmonth = monthstr;
+      pickyear = yearString;
+
+
+      var yearString2 = DateFormat.yMMMMd('en_US')
+          .format(format.parse(widget.EndDate!))
+          .substring(DateFormat.yMMMMd('en_US')
+          .format(format.parse(widget.EndDate!))
+          .length -
+          4);
+      var monthstr2;
+      var datestr2;
+
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
+          null &&
+          DateFormat.yMMMMd('en_US')
+              .format(format.parse(widget.EndDate!))
+              .length >=
+              6) {
+        datestr2 = DateFormat.yMMMMd('en_US')
+            .format(format.parse(widget.EndDate!))
+            .substring(
+            0,
+            DateFormat.yMMMMd('en_US')
+                .format(format.parse(widget.EndDate!))
+                .length -
+                6);
+        datestr2 = datestr2.substring(datestr2.length - 2);
+
+      }
+
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
+          null &&
+          DateFormat.yMMMMd('en_US')
+              .format(format.parse(widget.EndDate!))
+              .length >=
+              8) {
+        monthstr2 = DateFormat.yMMMMd('en_US')
+            .format(format.parse(widget.EndDate!))
+            .substring(
+            0,
+            DateFormat.yMMMMd('en_US')
+                .format(format.parse(widget.EndDate!))
+                .length -
+                8);
+      }
+
+      pickenddate = datestr2;
+      pickendmonth = monthstr2;
+      pickendyear = yearString2;
+
+
+      usernameCont.text=widget.Username!;
+      passwordCont.text=widget.Password!;
+      portCont.text=widget.Port!;
+      nameCont.text=widget.Name!;
+      folderCont.text=widget.RootFolder!;
+      urlCont.text=widget.Url!;
+      hostCont.text=widget.Host!;
+      selectedDate=format.parse(widget.StartDate!);
+      selectedendDate=format.parse(widget.EndDate!);
+      mysqlusernameCont.text=widget.mysqlUsername!;
+      mysqlpasswordCont.text=widget.mysqlPassword!;
+      mysqlhostCont.text=widget.mysqlHost!;
+      mysqlportCont.text=widget.mysqlPort!;
+      mysqldatabaseCont.text=widget.mysqlDatabase!;
+      portaltypeCont.text=widget.PortalType!;
+
+
+
+
+      return '';
+    } catch (e) {
+      print('caught error $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -723,32 +748,32 @@ Navigator.pop(context);
                               ),
                             ),
                             Positioned(
-                              bottom: 0,
-                              child: Container(
-                                height: 60,
-                                width: width,
-                                margin: EdgeInsets.only(top: 4),
-                                decoration: BoxDecoration(color: sh_white),
-                                child: InkWell(
-                                  onTap: () async {
-                                    Navigator.of(context).pop(ConfirmAction.CANCEL);
-                                    // getRegister();
+                                bottom: 0,
+                                child: Container(
+                                  height: 60,
+                                  width: width,
+                                  margin: EdgeInsets.only(top: 4),
+                                  decoration: BoxDecoration(color: sh_white),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      Navigator.of(context).pop(ConfirmAction.CANCEL);
+                                      // getRegister();
 // MyCheck();
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.only(
-                                        top: 6, bottom: 10),
-                                    decoration: boxDecoration(
-                                        bgColor: sh_btn_color, radius: 10, showShadow: true),
-                                    child: text("Select",
-                                        fontSize: 24.0,
-                                        textColor: sh_app_txt_color,
-                                        isCentered: true,
-                                        fontFamily: 'Bold'),
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      padding: EdgeInsets.only(
+                                          top: 6, bottom: 10),
+                                      decoration: boxDecoration(
+                                          bgColor: sh_btn_color, radius: 10, showShadow: true),
+                                      child: text("Select",
+                                          fontSize: 24.0,
+                                          textColor: sh_app_txt_color,
+                                          isCentered: true,
+                                          fontFamily: 'Bold'),
+                                    ),
                                   ),
-                                ),
-                              )
+                                )
                             ),
                           ],
                         ),
@@ -767,34 +792,12 @@ Navigator.pop(context);
     }
 
     UserSelection(){
-      if(selectedUserIndex==-1){
-    return InkWell(
-      onTap: () async{
-        ShowDlg2();
 
-
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(
-            spacing_standard_new,16,
-            spacing_standard_new,16),
-        decoration:
-        BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("Select User",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
-            Icon(Icons.keyboard_arrow_right)
-          ],
-        ),
-      ),
-    );
-      }else{
-        String userss=customerListModel!.data![selectedUserIndex]!.name!;
+        String userss=widget.Username!;
 
         return InkWell(
           onTap: () async{
-            ShowDlg2();
+            // ShowDlg2();
 
 
           },
@@ -807,13 +810,11 @@ Navigator.pop(context);
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Change User\n$userss",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
-                Icon(Icons.keyboard_arrow_right)
+                Text("User Name\n$userss",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
               ],
             ),
           ),
         );
-      }
 
     }
 
@@ -822,7 +823,7 @@ Navigator.pop(context);
       backgroundColor: sh_white,
       appBar: AppBar(
         elevation: 0,
-        title: Text("Add Portal",style: TextStyle(color: sh_app_txt_color,fontSize: 24,fontFamily: 'Bold'),),
+        title: Text("Edit Portal",style: TextStyle(color: sh_app_txt_color,fontSize: 24,fontFamily: 'Bold'),),
         backgroundColor: sh_white,
         iconTheme: IconThemeData(color: sh_textColorPrimary),
         actionsIconTheme: IconThemeData(color: sh_white),
@@ -877,59 +878,45 @@ Navigator.pop(context);
                       ),
                     ),
                     SizedBox(height: 12,),
-                    FutureBuilder<PortalTypeModel?>(
-                      future: portaltypedetail,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Container(
-                            padding: EdgeInsets.fromLTRB(
-                                spacing_standard_new,2,
-                                spacing_standard_new,2),
-                            decoration:
-                            BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Flexible(
-                                  child: DropdownButton<PortalTypeModelDataPortalTypes?>(
-                                    underline: Container(),
-                                    // decoration: InputDecoration(
-                                    //     labelText: 'Change Country'
-                                    // ),
-                                    isExpanded: true,
-                                    items: portalTypeModel!.data!.portalTypes!.map((item) {
-                                      return new DropdownMenuItem(
-                                        child: Text(
-                                          item!.value!,
-                                            style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold')
-                                        ),
-                                        value: item,
-                                      );
-                                    }).toList(),
-                                    hint: Text('Select Portal Type',style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold')),
-                                    value: selectedValue,
-                                    onChanged: (PortalTypeModelDataPortalTypes? newVal) async{
-// toast(newVal!.type);
-                                      setState(() {
-                                        selectedValue = newVal;
-                                        portal_type = newVal!.type!;
-
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
+                    Container(
+                      padding: EdgeInsets.fromLTRB(
+                          spacing_standard_new,2,
+                          spacing_standard_new,2),
+                      decoration:
+                      BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          TextFormField(
+                            onEditingComplete: () =>
+                                node.nextFocus(),
+                            enabled: false,
+                            controller: portaltypeCont,
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Username';
+                              }
+                              return null;
+                            },
+                            cursorColor: sh_app_txt_color,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                              hintText: "Portal Type",
+                              hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                              labelText: "Portal Type",
+                              labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                              ),
                             ),
-                          )
-                          ;
-                        } else if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        // By default, show a loading spinner.
-                        return Container(
-                            child: Center(child: Text("Please Wait"))
-                        );
-                      },
+                            maxLines: 1,
+                            style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 12,),
                     Form(
@@ -976,6 +963,7 @@ Navigator.pop(context);
                       ),
                     ),
                     SizedBox(height: 12,),
+
                     InkWell(
                       onTap: () async{
                         _selectDate(context);
@@ -1026,6 +1014,7 @@ Navigator.pop(context);
                       ),
                     ),
                     SizedBox(height: 12,),
+
                     Form(
                       key: _formKey,
                       child: Container(
@@ -1037,9 +1026,7 @@ Navigator.pop(context);
                         child: Column(
                           children: [
                             Text("SFTP/SSH Controls",style: TextStyle(color: sh_app_txt_color,fontSize: 20,fontFamily: 'Bold'),),
-
                             SizedBox(height: 12,),
-
                             Container(
                               padding: EdgeInsets.fromLTRB(
                                   spacing_standard_new,2,
@@ -1121,7 +1108,6 @@ Navigator.pop(context);
                                 ],
                               ),
                             ),
-
                             SizedBox(height: 12,),
                             Container(
                               padding: EdgeInsets.fromLTRB(
@@ -1250,7 +1236,6 @@ Navigator.pop(context);
                                     maxLines: 1,
                                     style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
                                   ),
-
                                 ],
                               ),
                             ),
@@ -1264,8 +1249,8 @@ Navigator.pop(context);
                                       // TODO submit
                                       if (_formKey2.currentState!.validate()) {
                                         // TODO submit
-                                        if(portal_type==''){
-                                         toast("Please Select Portal Type");
+                                        if(widget.PortalType==''){
+                                          toast("Please Select Portal Type");
                                         }else {
                                           FocusScope.of(context).requestFocus(
                                               FocusNode());
@@ -1273,9 +1258,276 @@ Navigator.pop(context);
                                         }
                                       }
                                     }
-
+                                    // getCheckSFTP();
                                     // getRegister();
 // MyCheck();
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        top: 2, bottom: 6,left: 12,right: 12),
+                                    decoration: boxDecoration(
+                                        bgColor: sh_btn_color, radius: 10, showShadow: true),
+                                    child: text("Check Connection",
+                                        fontSize: 14.0,
+                                        textColor: sh_app_txt_color,
+                                        isCentered: true,
+                                        fontFamily: 'Bold'),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ),
+
+
+
+                    SizedBox(height: 12,),
+                    Form(
+                      key: _formKey3,
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(
+                            spacing_standard_new,16,
+                            spacing_standard_new,16),
+                        decoration:
+                        BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                        child: Column(
+                          children: [
+                            Text("Mysql Controls",style: TextStyle(color: sh_app_txt_color,fontSize: 20,fontFamily: 'Bold'),),
+                            SizedBox(height: 12,),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  spacing_standard_new,2,
+                                  spacing_standard_new,2),
+                              decoration:
+                              BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    onEditingComplete: () =>
+                                        node.nextFocus(),
+                                    controller: mysqlusernameCont,
+                                    validator: (text) {
+                                      if (text == null || text.isEmpty) {
+                                        return 'Please Enter MySql Username';
+                                      }
+                                      return null;
+                                    },
+                                    cursorColor: sh_app_txt_color,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                                      hintText: "MySql Username",
+                                      hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      labelText: "MySql Username",
+                                      labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  spacing_standard_new,2,
+                                  spacing_standard_new,2),
+                              decoration:
+                              BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    onEditingComplete: () =>
+                                        node.nextFocus(),
+                                    controller: mysqlpasswordCont,
+                                    obscureText: !this._showPasswordMySql,
+                                    validator: (text) {
+                                      if (text == null || text.isEmpty) {
+                                        return 'Please Enter MySql Password';
+                                      }
+                                      return null;
+                                    },
+                                    cursorColor: sh_app_txt_color,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                                      hintText: "MySql Password",
+                                      hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          Icons.remove_red_eye,
+                                          color: this._showPasswordMySql ? sh_colorPrimary2 : Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          setState(() => this._showPasswordMySql = !this._showPasswordMySql);
+                                        },
+                                      ),
+                                      labelText: "MySql Password",
+                                      labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  spacing_standard_new,2,
+                                  spacing_standard_new,2),
+                              decoration:
+                              BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    onEditingComplete: () =>
+                                        node.nextFocus(),
+                                    controller: mysqlhostCont,
+                                    validator: (text) {
+                                      if (text == null || text.isEmpty) {
+                                        return 'Please Enter MySql Host';
+                                      }
+                                      return null;
+                                    },
+                                    cursorColor: sh_app_txt_color,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                                      hintText: "MySql Host",
+                                      hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      labelText: "MySql Host",
+                                      labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  spacing_standard_new,2,
+                                  spacing_standard_new,2),
+                              decoration:
+                              BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    onEditingComplete: () =>
+                                        node.nextFocus(),
+                                    controller: mysqlportCont,
+                                    validator: (text) {
+                                      if (text == null || text.isEmpty) {
+                                        return 'Please Enter MySql Port';
+                                      }
+                                      return null;
+                                    },
+                                    cursorColor: sh_app_txt_color,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                                      hintText: "MySql Port",
+                                      hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      labelText: "MySql Port",
+                                      labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(
+                                  spacing_standard_new,2,
+                                  spacing_standard_new,2),
+                              decoration:
+                              BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  TextFormField(
+                                    onEditingComplete: () =>
+                                        node.nextFocus(),
+                                    controller: mysqldatabaseCont,
+                                    validator: (text) {
+                                      if (text == null || text.isEmpty) {
+                                        return 'Please Enter MySql Database';
+                                      }
+                                      return null;
+                                    },
+                                    cursorColor: sh_app_txt_color,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
+                                      hintText: "MySql Database",
+                                      hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
+                                      labelText: "MySql Database",
+                                      labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide:  BorderSide(color: sh_transparent, width: 1.0),
+                                      ),
+                                    ),
+                                    maxLines: 1,
+                                    style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 12,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      // TODO submit
+                                      if (_formKey2.currentState!.validate()) {
+                                        // TODO submit
+                                        if (_formKey3.currentState!.validate()) {
+                                          if (widget.PortalType == '') {
+                                            toast("Please Select Portal Type");
+                                          } else {
+                                            FocusScope.of(context).requestFocus(
+                                                FocusNode());
+                                            getCheckDB();
+                                          }
+                                        }
+                                      }
+                                    }
+
                                   },
                                   child: Container(
                                     padding: EdgeInsets.only(
@@ -1296,284 +1548,12 @@ Navigator.pop(context);
                       ),
                     ),
 
-                    SizedBox(height: 12,),
-Form(
-  key: _formKey3,
-  child:   Container(
-    padding: EdgeInsets.fromLTRB(
-        spacing_standard_new,16,
-        spacing_standard_new,16),
-    decoration:
-    BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-    child: Column(
-      children: [
-        Text("Mysql Controls",style: TextStyle(color: sh_app_txt_color,fontSize: 20,fontFamily: 'Bold'),),
-        SizedBox(height: 12,),
-
-          Container(
-            padding: EdgeInsets.fromLTRB(
-                spacing_standard_new,2,
-                spacing_standard_new,2),
-            decoration:
-            BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  onEditingComplete: () =>
-                      node.nextFocus(),
-                  controller: mysqlusernameCont,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      return 'Please Enter MySql Username';
-                    }
-                    return null;
-                  },
-                  cursorColor: sh_app_txt_color,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                    hintText: "MySql Username",
-                    hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                    labelText: "MySql Username",
-                    labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                    ),
-                  ),
-                  maxLines: 1,
-                  style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                ),
-              ],
-            ),
-          ),
-
-        SizedBox(height: 12,),
-        Container(
-          padding: EdgeInsets.fromLTRB(
-              spacing_standard_new,2,
-              spacing_standard_new,2),
-          decoration:
-          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                onEditingComplete: () =>
-                    node.nextFocus(),
-                controller: mysqlpasswordCont,
-                obscureText: !this._showPasswordMySql,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Please Enter MySql Password';
-                  }
-                  return null;
-                },
-                cursorColor: sh_app_txt_color,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                  hintText: "MySql Password",
-                  hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: this._showPasswordMySql ? sh_colorPrimary2 : Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() => this._showPasswordMySql = !this._showPasswordMySql);
-                    },
-                  ),
-                  labelText: "MySql Password",
-                  labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                ),
-                maxLines: 1,
-                style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 12,),
-        Container(
-          padding: EdgeInsets.fromLTRB(
-              spacing_standard_new,2,
-              spacing_standard_new,2),
-          decoration:
-          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                onEditingComplete: () =>
-                    node.nextFocus(),
-                controller: mysqlhostCont,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Please Enter MySql Host';
-                  }
-                  return null;
-                },
-                cursorColor: sh_app_txt_color,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                  hintText: "MySql Host",
-                  hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                  labelText: "MySql Host",
-                  labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                ),
-                maxLines: 1,
-                style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 12,),
-        Container(
-          padding: EdgeInsets.fromLTRB(
-              spacing_standard_new,2,
-              spacing_standard_new,2),
-          decoration:
-          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                onEditingComplete: () =>
-                    node.nextFocus(),
-                controller: mysqlportCont,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Please Enter MySql Port';
-                  }
-                  return null;
-                },
-                cursorColor: sh_app_txt_color,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                  hintText: "MySql Port",
-                  hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                  labelText: "MySql Port",
-                  labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                ),
-                maxLines: 1,
-                style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 12,),
-        Container(
-          padding: EdgeInsets.fromLTRB(
-              spacing_standard_new,2,
-              spacing_standard_new,2),
-          decoration:
-          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                onEditingComplete: () =>
-                    node.nextFocus(),
-                controller: mysqldatabaseCont,
-                validator: (text) {
-                  if (text == null || text.isEmpty) {
-                    return 'Please Enter MySql Database';
-                  }
-                  return null;
-                },
-                cursorColor: sh_app_txt_color,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(2, 8, 4, 8),
-                  hintText: "MySql Database",
-                  hintStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Regular'),
-                  labelText: "MySql Database",
-                  labelStyle: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:  BorderSide(color: sh_transparent, width: 1.0),
-                  ),
-                ),
-                maxLines: 1,
-                style: TextStyle(color: sh_app_txt_color,fontFamily: 'Bold'),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 12,),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            InkWell(
-              onTap: () async {
-                if (_formKey.currentState!.validate()) {
-                  // TODO submit
-                  if (_formKey2.currentState!.validate()) {
-                    // TODO submit
-                    if (_formKey3.currentState!.validate()) {
-                      if (portal_type == '') {
-                        toast("Please Select Portal Type");
-                      } else {
-                        FocusScope.of(context).requestFocus(
-                            FocusNode());
-                        getCheckDB();
-                      }
-                    }
-                  }
-                }
-
-                // getRegister();
-  // MyCheck();
-              },
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: 2, bottom: 6,left: 12,right: 12),
-                decoration: boxDecoration(
-                    bgColor: sh_btn_color, radius: 10, showShadow: true),
-                child: text("Check Connection",
-                    fontSize: 14.0,
-                    textColor: sh_app_txt_color,
-                    isCentered: true,
-                    fontFamily: 'Bold'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  ),
-),
-
 
                     SizedBox(height: 42,),
                     InkWell(
                       onTap: () async {
-                        if(selectedUserIndex==-1){
-                          toast("Select User");
-                        }else {
-                          // toast(customerListModel!.data![selectedAddressIndex]!.name);
-                          getAddPortal();
-                        }
+
+                        getAddPortal();
 // MyCheck();
                       },
                       child: Container(
@@ -1582,7 +1562,7 @@ Form(
                             top: 6, bottom: 10),
                         decoration: boxDecoration(
                             bgColor: sh_btn_color, radius: 10, showShadow: true),
-                        child: text("Add Portal",
+                        child: text("Save Portal",
                             fontSize: 24.0,
                             textColor: sh_app_txt_color,
                             isCentered: true,
@@ -1592,7 +1572,8 @@ Form(
 
                   ],
                 )),
-          )),
+          ))
+
     );
   }
 }

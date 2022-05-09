@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/CustomerListModel.dart';
@@ -25,30 +26,16 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   CustomerListModel? customerListModel;
   // CustomerListModel? customerListModel2;
   List<CustomerListModelData?>? customerListModel2=[];
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getAllGroups();
-  //   // disableCapture();
-  // }
-  //
-  // _getAllGroups() async {
-  //   try {
-  //
-  //     setState(() {
-  //       _groups5=FirebaseFirestore.instance.collection("Users").snapshots();
-  //
-  //     });
-  //
-  //
-  //   } catch (e) {
-  //     // setState(() {
-  //     //   _error = true;
-  //     // });
-  //   }
-  // }
 
-  Future<CustomerListModel?> fetchCustomer() async {
+  @override
+  void initState() {
+    super.initState();
+    fetchCustomer();
+    // listResortModel2 = fetchRestore(delay: 2);
+  }
+
+  Future<List<CustomerListModelData?>?> fetchCustomer() async {
+    EasyLoading.show(status: 'Please wait...');
     try {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,15 +58,25 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       customerListModel2!.clear();
 
       customerListModel = new CustomerListModel.fromJson(jsonResponse);
+      EasyLoading.dismiss();
 
-      customerListModel2=customerListModel!.data!.reversed.toList();
+      // customerListModel2=customerListModel!.data!.reversed.toList();
       // print(_addressModel!.data);
+      setState(() {
+        customerListModel2=customerListModel!.data!.reversed.toList();
+      });
 
-
-      return customerListModel;
+      return customerListModel2;
     } catch (e) {
+      EasyLoading.dismiss();
       print('caught error $e');
     }
+  }
+
+  Future<void> _getData() async {
+    setState(() {
+      fetchCustomer();
+    });
   }
 
   @override
@@ -87,87 +84,163 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
 
+    Widget groupList(){
+      return
+      RefreshIndicator(
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: customerListModel2!.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditProfileScreen(
+                          CustomerId: customerListModel2![index]!.id!.toString(),
+                          name: customerListModel2![index]!.name!.toString(),
+                          email: customerListModel2![index]!.email!.toString(),
+                          phone: customerListModel2![index]!.phone!.toString(),
+                          country: customerListModel2![index]!.country!.toString(),
+                          password: customerListModel2![index]!.email!.toString(),
+                        )),
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: groupName,)));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
 
-    Widget groupList() {
-      return FutureBuilder<CustomerListModel?>(
-        future: fetchCustomer(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: customerListModel2!.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditProfileScreen(
-                              CustomerId: customerListModel2![index]!.id!.toString(),
-                              name: customerListModel2![index]!.name!.toString(),
-                              email: customerListModel2![index]!.email!.toString(),
-                              phone: customerListModel2![index]!.phone!.toString(),
-                              country: customerListModel2![index]!.country!.toString(),
-                              password: customerListModel2![index]!.email!.toString(),
-                            )),
-                      );
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: groupName,)));
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-
-                          decoration:
-                          BoxDecoration(color: sh_white,border: Border.all(color: sh_app_black, width: 1.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0,8,8,8),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(12,6,12,6),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                      decoration:
+                      BoxDecoration(color: sh_white,border: Border.all(color: sh_app_black, width: 1.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8.0,8,8,8),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(12,6,12,6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(customerListModel2![index]!.name!,
-                                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: sh_app_black)),
-                                      SizedBox(height: 6,),
-                                      Text(customerListModel2![index]!.email!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                      SizedBox(height: 2,),
-                                      Text(customerListModel2![index]!.country!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                      SizedBox(height: 2,),
-                                      Text(customerListModel2![index]!.phone!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                      SizedBox(height: 2,),
+                                  Text(customerListModel2![index]!.name!,
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: sh_app_black)),
+                                  SizedBox(height: 6,),
+                                  Text(customerListModel2![index]!.email!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+                                  SizedBox(height: 2,),
+                                  Text(customerListModel2![index]!.country!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+                                  SizedBox(height: 2,),
+                                  Text(customerListModel2![index]!.phone!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+                                  SizedBox(height: 2,),
 
-                                    ],),
-                                  Icon(
-                                    Icons.keyboard_arrow_right,
-                                    color: sh_app_black,
-                                    size: 36,
-                                  )
-                                ],
-                              ),
-                            ),
+                                ],),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: sh_app_black,
+                                size: 36,
+                              )
+                            ],
                           ),
                         ),
-                        SizedBox(height: 12,)
-                      ],
+                      ),
                     ),
+                    SizedBox(height: 12,)
+                  ],
+                ),
 
-                  );
-                }
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          // By default, show a loading spinner.
-          return CircularProgressIndicator();
-        },
+              );
+            }
+        ),
+        onRefresh: _getData,
       );
+
+      // CircularProgressIndicator();
     }
+
+
+    // Widget groupList() {
+    //   return FutureBuilder<CustomerListModel?>(
+    //     future: fetchCustomer(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasData) {
+    //         return ListView.builder(
+    //             shrinkWrap: true,
+    //             itemCount: customerListModel2!.length,
+    //             itemBuilder: (context, index) {
+    //               return GestureDetector(
+    //                 onTap: () {
+    //                   Navigator.push(
+    //                     context,
+    //                     MaterialPageRoute(
+    //                         builder: (context) => EditProfileScreen(
+    //                           CustomerId: customerListModel2![index]!.id!.toString(),
+    //                           name: customerListModel2![index]!.name!.toString(),
+    //                           email: customerListModel2![index]!.email!.toString(),
+    //                           phone: customerListModel2![index]!.phone!.toString(),
+    //                           country: customerListModel2![index]!.country!.toString(),
+    //                           password: customerListModel2![index]!.email!.toString(),
+    //                         )),
+    //                   );
+    //                   // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatPage(groupId: groupId, userName: userName, groupName: groupName,)));
+    //                 },
+    //                 child: Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.stretch,
+    //                   children: [
+    //                     Container(
+    //
+    //                       decoration:
+    //                       BoxDecoration(color: sh_white,border: Border.all(color: sh_app_black, width: 1.0)),
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.fromLTRB(8.0,8,8,8),
+    //                         child: Container(
+    //                           padding: EdgeInsets.fromLTRB(12,6,12,6),
+    //                           child: Row(
+    //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                             crossAxisAlignment: CrossAxisAlignment.center,
+    //                             children: [
+    //                               Column(
+    //                                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                                 mainAxisAlignment: MainAxisAlignment.start,
+    //                                 children: [
+    //                                   Text(customerListModel2![index]!.name!,
+    //                                       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: sh_app_black)),
+    //                                   SizedBox(height: 6,),
+    //                                   Text(customerListModel2![index]!.email!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+    //                                   SizedBox(height: 2,),
+    //                                   Text(customerListModel2![index]!.country!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+    //                                   SizedBox(height: 2,),
+    //                                   Text(customerListModel2![index]!.phone!,style: TextStyle(fontSize: 16,color: sh_app_black)),
+    //                                   SizedBox(height: 2,),
+    //
+    //                                 ],),
+    //                               Icon(
+    //                                 Icons.keyboard_arrow_right,
+    //                                 color: sh_app_black,
+    //                                 size: 36,
+    //                               )
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ),
+    //                     SizedBox(height: 12,)
+    //                   ],
+    //                 ),
+    //
+    //               );
+    //             }
+    //         );
+    //       } else if (snapshot.hasError) {
+    //         return Text("${snapshot.error}");
+    //       }
+    //       // By default, show a loading spinner.
+    //       return CircularProgressIndicator();
+    //     },
+    //   );
+    // }
 
     return Scaffold(
 backgroundColor: sh_white,

@@ -67,6 +67,8 @@ const food_ShadowColor = Color(0X95E9EBF0);
 const food_ShadowColors = Color(0XFFE2E2E2);
 const food_color_blue_gradient1 = Color(0xFF398CE8);
 const food_color_blue_gradient2 = Color(0xFF3F77DE);
+const food_color_blue_gradient2_light = Color(0xFF8badeb);
+
 const food_color_orange_gradient1 = Color(0xFFFD825D);
 const food_color_orange_gradient2 = Color(0xFFFE5052);
 const food_color_yellow_gradient1 = Color(0xFFFF895F);

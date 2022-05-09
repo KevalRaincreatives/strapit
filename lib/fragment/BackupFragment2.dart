@@ -118,7 +118,6 @@ class _BackupFragmentState extends State<BackupFragment> {
               portalName: listAllBackupModel!.data![i]!.portalName,portalUrl: listAllBackupModel!.data![i]!.portalUrl,
               status: listAllBackupModel!.data![i]!.status));
 
-          listAllBackupModeldata=listAllBackupModeldata!.reversed.toList();
         }
 //        orderListModel = new OrderListModel2.fromJson(i);
       }
@@ -414,72 +413,6 @@ class _BackupFragmentState extends State<BackupFragment> {
       }
     }
 
-    SetBackupDate(int index){
-      if(listAllBackupModeldata![index]!.backupTime != null) {
-        var inputFormat = DateFormat("yyyy-MM-dd");
-
-        String date1 = inputFormat.parse(
-            listAllBackupModeldata![index]!.backupTime!.substring(0,10)).toString();
-        DateTime dateTime = DateTime.parse(date1);
-        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
-
-        String date2 = outputFormat.toString();
-
-        String lasttime=listAllBackupModeldata![index]!.backupTime!.substring(10);
-        return Text(
-          listAllBackupModeldata![index]!
-              .backupTime ==
-              null ? '' :
-          "Backup : " +
-              date2 +lasttime,
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }else{
-        return Text('',
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }
-    }
-
-    SetBackupCustomerDate(int index){
-      if(listCustomerBackupModeldata![index]!.backupTime != null) {
-        var inputFormat = DateFormat("yyyy-MM-dd");
-
-        String date1 = inputFormat.parse(
-            listCustomerBackupModeldata![index]!.backupTime!.substring(0,10)).toString();
-        DateTime dateTime = DateTime.parse(date1);
-        var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
-
-        String date2 = outputFormat.toString();
-
-        String lasttime=listCustomerBackupModeldata![index]!.backupTime!.substring(10);
-        return Text(
-          listCustomerBackupModeldata![index]!
-              .backupTime ==
-              null ? '' :
-          "Backup : " +
-              date2 +lasttime,
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }else{
-        return Text('',
-          style: TextStyle(
-              color: sh_app_txt_color,
-              fontSize: 15,
-              fontFamily: 'Bold'),
-        );
-      }
-    }
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -595,31 +528,16 @@ class _BackupFragmentState extends State<BackupFragment> {
                                                             ),
                                                             Text(
                                                               listAllBackupModeldata![index]!
-                                                                  .backupId ==
+                                                                  .backupTime ==
                                                                   null ? '' :
-                                                              "Backup Id: " +
-                                                                  listAllBackupModeldata![index]!.backupId!.toString(),
+                                                              "Backup : " +
+                                                                  listAllBackupModeldata![index]!
+                                                                      .backupTime!,
                                                               style: TextStyle(
                                                                   color: sh_app_txt_color,
                                                                   fontSize: 15,
                                                                   fontFamily: 'Bold'),
                                                             ),
-                                                            SizedBox(
-                                                              height: 4,
-                                                            ),
-                                                            SetBackupDate(index),
-                                                            // Text(
-                                                            //   listAllBackupModeldata![index]!
-                                                            //       .backupTime ==
-                                                            //       null ? '' :
-                                                            //   "Backup : " +
-                                                            //       listAllBackupModeldata![index]!
-                                                            //           .backupTime!,
-                                                            //   style: TextStyle(
-                                                            //       color: sh_app_txt_color,
-                                                            //       fontSize: 15,
-                                                            //       fontFamily: 'Bold'),
-                                                            // ),
                                                             SizedBox(
                                                               height: 4,
                                                             ),
@@ -761,31 +679,16 @@ class _BackupFragmentState extends State<BackupFragment> {
                                                                 SizedBox(
                                                                   height: 4,
                                                                 ),
-                                                                Text(
-                                                                  listCustomerBackupModeldata![index]!
-                                                                      .backupId ==
-                                                                      null ? '' :
-                                                                  "Backup Id: " +
-                                                                      listCustomerBackupModeldata![index]!.backupId!.toString(),
+                                                                Text(listCustomerBackupModeldata![index]!
+                                                                    .backupTime == null ? '' :
+                                                                "Backup : " +
+                                                                    listCustomerBackupModeldata![index]!
+                                                                        .backupTime!,
                                                                   style: TextStyle(
                                                                       color: sh_app_txt_color,
                                                                       fontSize: 15,
                                                                       fontFamily: 'Bold'),
                                                                 ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                SetBackupCustomerDate(index),
-                                                                // Text(listCustomerBackupModeldata![index]!
-                                                                //     .backupTime == null ? '' :
-                                                                // "Backup : " +
-                                                                //     listCustomerBackupModeldata![index]!
-                                                                //         .backupTime!,
-                                                                //   style: TextStyle(
-                                                                //       color: sh_app_txt_color,
-                                                                //       fontSize: 15,
-                                                                //       fontFamily: 'Bold'),
-                                                                // ),
                                                                 SizedBox(
                                                                   height: 4,
                                                                 ),

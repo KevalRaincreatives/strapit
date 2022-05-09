@@ -8,6 +8,7 @@ import 'package:strapit/screens/AddCustomerScreen.dart';
 import 'package:strapit/screens/AddPortalScreen.dart';
 import 'package:strapit/screens/AddTicketScreen.dart';
 import 'package:strapit/screens/AdminDashoardScreen.dart';
+import 'package:strapit/screens/ChangePasswordScreen.dart';
 import 'package:strapit/screens/CustmerDashoardScreen.dart';
 import 'package:strapit/screens/CustomerListScreen.dart';
 import 'package:strapit/screens/EditPortalScreen.dart';
@@ -123,6 +124,7 @@ initialRoute: SplashScreens.tag,
         MyPortalScreen.tag: (BuildContext contex) => MyPortalScreen(),
         AddPortalScreen.tag: (BuildContext contex) => AddPortalScreen(),
         EditPortalScreen.tag: (BuildContext contex) => EditPortalScreen(),
+        ChangePasswordScreen.tag: (BuildContext contex) => ChangePasswordScreen(),
 
 
       },

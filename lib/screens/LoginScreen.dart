@@ -33,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   ShLoginModel? cat_model;
   ShLoginErrorNewModel? err_model;
 
-
 //   Future<String?> getLogin() async {
 //     // Dialogs.showLoadingDialog(context, _keyLoader);
 //     EasyLoading.show(status: 'Loading...');
@@ -231,7 +230,6 @@ class _LoginScreenState extends State<LoginScreen> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     final node = FocusScope.of(context);
-
 
     return Scaffold(
       body: Center(
