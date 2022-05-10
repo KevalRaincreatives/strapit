@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "612544349040-dmfm7feucl1g3k6km7ufc9cjoraomacf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rc.strapit",
+            "certificate_hash": "20a0eb8e390028da7d20b9ff813900d9fa97136d"
+          }
+        },
+        {
           "client_id": "612544349040-pqe3fs6g1mfl9fla0g4jllskag1utl9d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
