@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "612544349040-a6u68atfntp5fgq6at9rvdgqv1mj81t9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rc.strapit",
+            "certificate_hash": "f541e99669f9ef5c046cb5633ee690b29e6f3e03"
+          }
+        },
+        {
           "client_id": "612544349040-pqe3fs6g1mfl9fla0g4jllskag1utl9d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "612544349040-5cfoieqdq558t4ploq6652j6l4g12mnc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "612544349040-tt4b1ho001e9f2c4pnjk89ooq7fs80n3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rc.strapit"
+              }
             }
           ]
         }

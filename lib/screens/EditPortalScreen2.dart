@@ -304,8 +304,6 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
         client.close();
       }
 
-
-
       final jsonResponse = json.decode(response.body);
       print('not json regi$jsonResponse');
       print('Response bodyregi: ${response.body}');
