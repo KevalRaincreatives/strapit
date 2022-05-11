@@ -179,6 +179,118 @@
 //       }
 //     }
 //
+//     SetStartDate(int index){
+//       if(portalListModel!.data![index]!.planStartDate != null) {
+//         var inputFormat = DateFormat("yyyy-MM-dd");
+//
+//         String date1 = inputFormat.parse(
+//             portalListModel!.data![index]!.planStartDate!).toString();
+//         DateTime dateTime = DateTime.parse(date1);
+//         var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+//
+//         String date2 = outputFormat.toString();
+//         return Text(portalListModel!.data![index]!
+//             .planStartDate == null ? '' :
+//         "Start Date : " + date2,
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }else{
+//         return Text('',
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }
+//     }
+//
+//     SetEndDate(int index){
+//       if(portalListModel!.data![index]!.planEndDate != null) {
+//         var inputFormat = DateFormat("yyyy-MM-dd");
+//
+//         String date1 = inputFormat.parse(
+//             portalListModel!.data![index]!.planEndDate!).toString();
+//         DateTime dateTime = DateTime.parse(date1);
+//         var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+//
+//         String date2 = outputFormat.toString();
+//         return Text(portalListModel!.data![index]!
+//             .planEndDate == null ? '' :
+//         "End Date : " + date2,
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }else{
+//         return Text('',
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }
+//     }
+//
+//     SetStartCustomerDate(int index){
+//       if(portalListCustomerModel!.data![index]!.planStartDate != null) {
+//         var inputFormat = DateFormat("yyyy-MM-dd");
+//
+//         String date1 = inputFormat.parse(
+//             portalListCustomerModel!.data![index]!.planStartDate!).toString();
+//         DateTime dateTime = DateTime.parse(date1);
+//         var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+//
+//         String date2 = outputFormat.toString();
+//         return Text(portalListCustomerModel!.data![index]!
+//             .planStartDate == null ? '' :
+//         "Start Date : " + date2,
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }else{
+//         return Text('',
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }
+//     }
+//
+//     SetEndCustomerDate(int index){
+//       if(portalListCustomerModel!.data![index]!.planEndDate != null) {
+//         var inputFormat = DateFormat("yyyy-MM-dd");
+//
+//         String date1 = inputFormat.parse(
+//             portalListCustomerModel!.data![index]!.planEndDate!).toString();
+//         DateTime dateTime = DateTime.parse(date1);
+//         var outputFormat = DateFormat.yMMMMd('en_US').format(dateTime);
+//
+//         String date2 = outputFormat.toString();
+//         return Text(portalListCustomerModel!.data![index]!
+//             .planEndDate == null ? '' :
+//         "End Date : " + date2,
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }else{
+//         return Text('',
+//           style: TextStyle(
+//               color: sh_app_txt_color,
+//               fontSize: 15,
+//               fontFamily: 'Bold'),
+//         );
+//       }
+//     }
+//
 //     return FutureBuilder<int?>(
 //       future: fetchadd(),
 //       builder: (context, snapshot) {
@@ -325,7 +437,6 @@
 //                                 ],
 //                               ),
 //                             ),
-//
 //                             CheckDate(),
 //                             SizedBox(
 //                               height: 10,
@@ -336,36 +447,17 @@
 //                                 if (snapshot.hasData) {
 // if(portalListModel!.data==null){
 //   return Container();
-// }else {
+// }
+// else {
 //   return Expanded(
 //     child: ListView.builder(
 //         shrinkWrap: true,
 //         physics: AlwaysScrollableScrollPhysics(),
 //         itemCount: portalListModel!.data!.length,
 //         itemBuilder: (context, index) {
-//
 //           if (editingController.text.isEmpty) {
 //             return GestureDetector(
 //               onTap: () {
-//                 // Navigator.push(
-//                 //   context,
-//                 //   MaterialPageRoute(
-//                 //       builder: (context) => EditPortalScreen(
-//                 //         PortalId: portalListModel!.data![index]!.id.toString(),
-//                 //           CustomerId: portalListModel!.data![index]!.userId!.toString(),
-//                 //           UserIdName: portalListModel!.data![index]!.username!.toString(),
-//                 //         Name: portalListModel!.data![index]!.name!.toString(),
-//                 //         Username: portalListModel!.data![index]!.username!.toString(),
-//                 //         Password: portalListModel!.data![index]!.password!.toString(),
-//                 //         Url: portalListModel!.data![index]!.url!.toString(),
-//                 //         Host: portalListModel!.data![index]!.host!.toString(),
-//                 //         Port: portalListModel!.data![index]!.port!.toString(),
-//                 //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
-//                 //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
-//                 //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
-//                 //       )),
-//                 // );
-//                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListModel!.data![index]!.id.toString(),)));
 //               },
 //               child: Column(
 //                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -387,6 +479,15 @@
 //                               style: TextStyle(
 //                                   color: sh_app_txt_color,
 //                                   fontSize: 17,
+//                                   fontFamily: 'Bold'),
+//                             ),
+//                             SizedBox(
+//                               height: 4,
+//                             ),
+//                             Text(portalListModel!.data![index]!.portal_type==null?'':"Portal Type: "+portalListModel!.data![index]!.portal_type!,
+//                               style: TextStyle(
+//                                   color: sh_app_txt_color,
+//                                   fontSize: 15,
 //                                   fontFamily: 'Bold'),
 //                             ),
 //                             SizedBox(
@@ -414,28 +515,30 @@
 //                             SizedBox(
 //                               height: 4,
 //                             ),
-//                             Text(portalListModel!.data![index]!
-//                                 .planStartDate == null ? '' :
-//                             "Start Date : " + portalListModel!.data![index]!
-//                                 .planStartDate!,
-//                               style: TextStyle(
-//                                   color: sh_app_txt_color,
-//                                   fontSize: 15,
-//                                   fontFamily: 'Bold'),
-//                             ),
+//                             SetStartDate(index),
+//                             // Text(portalListModel!.data![index]!
+//                             //     .planStartDate == null ? '' :
+//                             // "Start Date : " + portalListModel!.data![index]!
+//                             //     .planStartDate!,
+//                             //   style: TextStyle(
+//                             //       color: sh_app_txt_color,
+//                             //       fontSize: 15,
+//                             //       fontFamily: 'Bold'),
+//                             // ),
 //                             SizedBox(
 //                               height: 4,
 //                             ),
-//                             Text(
-//                               portalListModel!.data![index]!.planEndDate ==
-//                                   null ? '' :
-//                               "End Date : " + portalListModel!.data![index]!
-//                                   .planEndDate!,
-//                               style: TextStyle(
-//                                   color: sh_app_txt_color,
-//                                   fontSize: 15,
-//                                   fontFamily: 'Bold'),
-//                             ),
+//                             SetEndDate(index),
+//                             // Text(
+//                             //   portalListModel!.data![index]!.planEndDate ==
+//                             //       null ? '' :
+//                             //   "End Date : " + portalListModel!.data![index]!
+//                             //       .planEndDate!,
+//                             //   style: TextStyle(
+//                             //       color: sh_app_txt_color,
+//                             //       fontSize: 15,
+//                             //       fontFamily: 'Bold'),
+//                             // ),
 //                             SizedBox(
 //                               height: 4,
 //                             ),
@@ -501,7 +604,7 @@
 //                                                       .data![index]!.userId!
 //                                                       .toString(),
 //                                                   UserIdName: portalListModel!
-//                                                       .data![index]!.username!
+//                                                       .data![index]!.customerName!
 //                                                       .toString(),
 //                                                   Name: portalListModel!
 //                                                       .data![index]!
@@ -550,8 +653,13 @@
 //                                                       .data![index]!
 //                                                       .mysqlDatabase!
 //                                                       .toString(),
+//                                                   PortalType: portalListModel!.data![index]!.portal_type==null?"":
+//                                                     portalListModel!
+//                                                       .data![index]!.portal_type!
+//                                                       .toString(),
 //                                                 )),
-//                                       );
+//                                       ).then((_) =>
+//                                           setState(() {}));
 //                                     },
 //                                     child: Container(
 //                                       padding: EdgeInsets.all(4.0),
@@ -630,6 +738,15 @@
 //                             SizedBox(
 //                               height: 4,
 //                             ),
+//                             Text(portalListModel!.data![index]!.portal_type==null?'':"Portal Type: "+portalListModel!.data![index]!.portal_type!,
+//                               style: TextStyle(
+//                                   color: sh_app_txt_color,
+//                                   fontSize: 15,
+//                                   fontFamily: 'Bold'),
+//                             ),
+//                             SizedBox(
+//                               height: 4,
+//                             ),
 //                             Text(
 //                               "Customer : " + portalListModel!.data![index]!
 //                                   .customerName!,
@@ -739,7 +856,7 @@
 //                                                       .data![index]!.userId!
 //                                                       .toString(),
 //                                                   UserIdName: portalListModel!
-//                                                       .data![index]!.username!
+//                                                       .data![index]!.customerName!
 //                                                       .toString(),
 //                                                   Name: portalListModel!
 //                                                       .data![index]!
@@ -788,8 +905,11 @@
 //                                                       .data![index]!
 //                                                       .mysqlDatabase!
 //                                                       .toString(),
+//                                                   PortalType: portalListModel!.data![index]!.portal_type==null?"":
+//                                                   portalListModel!.data![index]!.portal_type,
 //                                                 )),
-//                                       );
+//                                       ).then((_) =>
+//                                           setState(() {}));
 //                                     },
 //                                     child: Container(
 //                                       padding: EdgeInsets.all(4.0),
@@ -820,8 +940,7 @@
 //               ),
 //
 //             );
-//           }
-//           else {
+//           } else {
 //             return Container();
 //           }
 //         }
@@ -871,6 +990,12 @@
 //                                     child: Container(
 //                                       child: TextFormField(
 //                                         textInputAction: TextInputAction.search,
+//                                         onChanged: (value){
+//                                           setState(() {
+//
+//                                           });
+//                                         },
+//                                         controller: editingController,
 //                                         onFieldSubmitted: (value) async {
 //                                           if (value.length > 1) {
 //                                           } else {
@@ -938,176 +1063,433 @@
 //                               future: fetchPortalCustomer(),
 //                               builder: (context, snapshot) {
 //                                 if (snapshot.hasData) {
+//                                   if(portalListCustomerModel!.data==null){
+//                                     return Container();
+//                                   }else {
+//                                     return Expanded(
+//                                       child: ListView.builder(
+//                                           shrinkWrap: true,
+//                                           itemCount: portalListCustomerModel!.data!.length,
+//                                           itemBuilder: (context, index) {
+//     if (editingController.text.isEmpty) {
+//       return GestureDetector(
+//         onTap: () {
+//         },
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             Container(
+//               decoration: BoxDecoration(
+//                   color: sh_white,
+//                   border:
+//                   Border.all(color: sh_app_black, width: 1.0)),
+//               child: Padding(
+//                 padding: const EdgeInsets.fromLTRB(4, 12, 4, 12),
+//                 child: ListTile(
+//                   title: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         "Portal Name: " +
+//                             portalListCustomerModel!.data![index]!.name!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 17,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       Text(portalListCustomerModel!.data![index]!.portal_type==null?'':"Portal Type: "+portalListCustomerModel!.data![index]!.portal_type!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 15,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       Text(
+//                         "Host : " +
+//                             portalListCustomerModel!.data![index]!.host!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 15,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       SetStartCustomerDate(index),
+//                       // Text(portalListCustomerModel!.data![index]!
+//                       //     .planStartDate == null ? '' :
+//                       // "Start Date : " + portalListCustomerModel!.data![index]!
+//                       //     .planStartDate!,
+//                       //   style: TextStyle(
+//                       //       color: sh_app_txt_color,
+//                       //       fontSize: 15,
+//                       //       fontFamily: 'Bold'),
+//                       // ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       SetEndCustomerDate(index),
+//                       // Text(
+//                       //   portalListCustomerModel!.data![index]!.planEndDate ==
+//                       //       null ? '' :
+//                       //   "End Date : " + portalListCustomerModel!.data![index]!
+//                       //       .planEndDate!,
+//                       //   style: TextStyle(
+//                       //       color: sh_app_txt_color,
+//                       //       fontSize: 15,
+//                       //       fontFamily: 'Bold'),
+//                       // ),
+//                       SizedBox(
+//                         height: 8,
+//                       ),
+//                       Row(
+//                         mainAxisSize: MainAxisSize.max,
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         children: [
+//                           Expanded(
+//                             flex: 2,
+//                             child: InkWell(
+//                               onTap: () async {
+//                                 Navigator.push(context, MaterialPageRoute(
+//                                     builder: (context) =>
+//                                         ManageBackupScreen(
+//                                           PortalId: portalListCustomerModel!
+//                                               .data![index]!.id.toString(),
+//                                           BackupUser: portalListCustomerModel!
+//                                               .data![index]!.userId
+//                                               .toString(),)));
+//                               },
+//                               child: Container(
+//                                 padding: EdgeInsets.all(4.0),
+//                                 decoration: boxDecoration(
+//                                     bgColor: sh_btn_color,
+//                                     radius: 6,
+//                                     showShadow: true),
+//                                 child: text("VIEW BACKUPS",
+//                                     fontSize: 14.0,
+//                                     textColor: sh_app_black,
+//                                     isCentered: true,
+//                                     fontFamily: 'Bold'),
+//                               ),
+//                             ),
+//                           ),
+//                           Expanded(child: Container(
+//                             width: 8,
+//                           )),
+//                           Expanded(
+//                             flex: 2,
+//                             child: InkWell(
+//                               onTap: () async {
+//                                 Navigator.push(
+//                                   context,
+//                                   MaterialPageRoute(
+//                                       builder: (context) =>
+//                                           EditPortalScreen(
+//                                             PortalId: portalListCustomerModel!
+//                                                 .data![index]!.id.toString(),
+//                                             CustomerId: portalListCustomerModel!
+//                                                 .data![index]!.userId!
+//                                                 .toString(),
+//                                             UserIdName: portalListCustomerModel!
+//                                                 .data![index]!.username!
+//                                                 .toString(),
+//                                             Name: portalListCustomerModel!
+//                                                 .data![index]!.name!.toString(),
+//                                             Username: portalListCustomerModel!
+//                                                 .data![index]!.username!
+//                                                 .toString(),
+//                                             Password: portalListCustomerModel!
+//                                                 .data![index]!.password!
+//                                                 .toString(),
+//                                             Url: portalListCustomerModel!
+//                                                 .data![index]!.url!.toString(),
+//                                             Host: portalListCustomerModel!
+//                                                 .data![index]!.host!.toString(),
+//                                             Port: portalListCustomerModel!
+//                                                 .data![index]!.port!.toString(),
+//                                             RootFolder: portalListCustomerModel!
+//                                                 .data![index]!.rootFolder!
+//                                                 .toString(),
+//                                             StartDate: portalListCustomerModel!
+//                                                 .data![index]!.planStartDate!
+//                                                 .toString(),
+//                                             EndDate: portalListCustomerModel!
+//                                                 .data![index]!.planEndDate!
+//                                                 .toString(),
+//                                             mysqlUsername: portalListCustomerModel!
+//                                                 .data![index]!.mysqlUsername!
+//                                                 .toString(),
+//                                             mysqlPassword: portalListCustomerModel!
+//                                                 .data![index]!.mysqlPassword!
+//                                                 .toString(),
+//                                             mysqlHost: portalListCustomerModel!
+//                                                 .data![index]!.mysqlHost!
+//                                                 .toString(),
+//                                             mysqlPort: portalListCustomerModel!
+//                                                 .data![index]!.mysqlPort!
+//                                                 .toString(),
+//                                             mysqlDatabase: portalListCustomerModel!
+//                                                 .data![index]!.mysqlDatabase!
+//                                                 .toString(),
+//                                             PortalType: portalListCustomerModel!.data![index]!.portal_type==null?"":
+//                                             portalListCustomerModel!
+//                                                 .data![index]!.portal_type!
+//                                                 .toString(),
+//                                           )),
+//                                 ).then((_) =>
+//                                     setState(() {}));
+//                               },
+//                               child: Container(
+//                                 padding: EdgeInsets.all(4.0),
+//                                 decoration: boxDecoration(
+//                                     bgColor: sh_btn_color,
+//                                     radius: 6,
+//                                     showShadow: true),
+//                                 child: text("EDIT PORTAL",
+//                                     fontSize: 14.0,
+//                                     textColor: sh_app_black,
+//                                     isCentered: true,
+//                                     fontFamily: 'Bold'),
+//                               ),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(
+//                         height: 1,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 12,)
+//           ],
+//         ),
 //
-//                                   return ListView.builder(
-//                                       shrinkWrap: true,
-//                                       itemCount: portalListCustomerModel!.data!.length,
-//                                       itemBuilder: (context, index) {
-//                                         return GestureDetector(
-//                                           onTap: () {
-//                                             // Navigator.push(
-//                                             //   context,
-//                                             //   MaterialPageRoute(
-//                                             //       builder: (context) => EditPortalScreen(
-//                                             //         PortalId: portalListModel!.data![index]!.id.toString(),
-//                                             //           CustomerId: portalListModel!.data![index]!.userId!.toString(),
-//                                             //           UserIdName: portalListModel!.data![index]!.username!.toString(),
-//                                             //         Name: portalListModel!.data![index]!.name!.toString(),
-//                                             //         Username: portalListModel!.data![index]!.username!.toString(),
-//                                             //         Password: portalListModel!.data![index]!.password!.toString(),
-//                                             //         Url: portalListModel!.data![index]!.url!.toString(),
-//                                             //         Host: portalListModel!.data![index]!.host!.toString(),
-//                                             //         Port: portalListModel!.data![index]!.port!.toString(),
-//                                             //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
-//                                             //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
-//                                             //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
-//                                             //       )),
-//                                             // );
-//                                             // Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListModel!.data![index]!.id.toString(),)));
-//                                           },
-//                                           child: Column(
-//                                             crossAxisAlignment: CrossAxisAlignment.stretch,
-//                                             children: [
-//                                               Container(
-//                                                 decoration: BoxDecoration(
-//                                                     color: sh_white,
-//                                                     border:
-//                                                     Border.all(color: sh_app_black, width: 1.0)),
-//                                                 child: Padding(
-//                                                   padding: const EdgeInsets.fromLTRB(4, 12, 4, 12),
-//                                                   child: ListTile(
-//                                                     title: Column(
-//                                                       crossAxisAlignment: CrossAxisAlignment.start,
-//                                                       children: [
-//                                                         Text(
-//                                                           "Portal Name: " + portalListCustomerModel!.data![index]!.name!,
-//                                                           style: TextStyle(
-//                                                               color: sh_app_txt_color,
-//                                                               fontSize: 17,
-//                                                               fontFamily: 'Bold'),
-//                                                         ),
-//                                                         SizedBox(
-//                                                           height: 4,
-//                                                         ),
-//                                                         Text(
-//                                                           "Host : " +
-//                                                               portalListCustomerModel!.data![index]!.host!,
-//                                                           style: TextStyle(
-//                                                               color: sh_app_txt_color,
-//                                                               fontSize: 15,
-//                                                               fontFamily: 'Bold'),
-//                                                         ),
-//                                                         SizedBox(
-//                                                           height: 4,
-//                                                         ),
-//                                                         Text(portalListCustomerModel!.data![index]!
-//                                                             .planStartDate == null ? '' :
-//                                                         "Start Date : " + portalListCustomerModel!.data![index]!
-//                                                             .planStartDate!,
-//                                                           style: TextStyle(
-//                                                               color: sh_app_txt_color,
-//                                                               fontSize: 15,
-//                                                               fontFamily: 'Bold'),
-//                                                         ),
-//                                                         SizedBox(
-//                                                           height: 4,
-//                                                         ),
-//                                                         Text(
-//                                                           portalListCustomerModel!.data![index]!.planEndDate ==
-//                                                               null ? '' :
-//                                                           "End Date : " + portalListCustomerModel!.data![index]!
-//                                                               .planEndDate!,
-//                                                           style: TextStyle(
-//                                                               color: sh_app_txt_color,
-//                                                               fontSize: 15,
-//                                                               fontFamily: 'Bold'),
-//                                                         ),
-//                                                         SizedBox(
-//                                                           height: 8,
-//                                                         ),
-//                                                         Row(
-//                                                           mainAxisSize: MainAxisSize.max,
-//                                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                                           children: [
-//                                                             Expanded(
-//                                                               flex: 2,
-//                                                               child: InkWell(
-//                                                                 onTap: () async {
-//                                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListCustomerModel!.data![index]!.id.toString(),BackupUser: portalListCustomerModel!.data![index]!.userId.toString(),)));
+//       );
+//     }else if (portalListCustomerModel!.data![index]!.name!.toLowerCase().contains(editingController.text)) {
+//       return GestureDetector(
+//         onTap: () {
+//           // Navigator.push(
+//           //   context,
+//           //   MaterialPageRoute(
+//           //       builder: (context) => EditPortalScreen(
+//           //         PortalId: portalListModel!.data![index]!.id.toString(),
+//           //           CustomerId: portalListModel!.data![index]!.userId!.toString(),
+//           //           UserIdName: portalListModel!.data![index]!.username!.toString(),
+//           //         Name: portalListModel!.data![index]!.name!.toString(),
+//           //         Username: portalListModel!.data![index]!.username!.toString(),
+//           //         Password: portalListModel!.data![index]!.password!.toString(),
+//           //         Url: portalListModel!.data![index]!.url!.toString(),
+//           //         Host: portalListModel!.data![index]!.host!.toString(),
+//           //         Port: portalListModel!.data![index]!.port!.toString(),
+//           //         RootFolder: portalListModel!.data![index]!.rootFolder!.toString(),
+//           //         StartDate: portalListModel!.data![index]!.planStartDate!.toString(),
+//           //         EndDate: portalListModel!.data![index]!.planEndDate!.toString(),
+//           //       )),
+//           // );
+//           // Navigator.push(context, MaterialPageRoute(builder: (context) => ManageBackupScreen(PortalId: portalListModel!.data![index]!.id.toString(),)));
+//         },
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             Container(
+//               decoration: BoxDecoration(
+//                   color: sh_white,
+//                   border:
+//                   Border.all(color: sh_app_black, width: 1.0)),
+//               child: Padding(
+//                 padding: const EdgeInsets.fromLTRB(4, 12, 4, 12),
+//                 child: ListTile(
+//                   title: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         "Portal Name: " +
+//                             portalListCustomerModel!.data![index]!.name!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 17,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       Text(
+//                         "Host : " +
+//                             portalListCustomerModel!.data![index]!.host!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 15,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       Text(portalListCustomerModel!.data![index]!
+//                           .planStartDate == null ? '' :
+//                       "Start Date : " + portalListCustomerModel!.data![index]!
+//                           .planStartDate!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 15,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 4,
+//                       ),
+//                       Text(
+//                         portalListCustomerModel!.data![index]!.planEndDate ==
+//                             null ? '' :
+//                         "End Date : " + portalListCustomerModel!.data![index]!
+//                             .planEndDate!,
+//                         style: TextStyle(
+//                             color: sh_app_txt_color,
+//                             fontSize: 15,
+//                             fontFamily: 'Bold'),
+//                       ),
+//                       SizedBox(
+//                         height: 8,
+//                       ),
+//                       Row(
+//                         mainAxisSize: MainAxisSize.max,
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         children: [
+//                           Expanded(
+//                             flex: 2,
+//                             child: InkWell(
+//                               onTap: () async {
+//                                 Navigator.push(context, MaterialPageRoute(
+//                                     builder: (context) =>
+//                                         ManageBackupScreen(
+//                                           PortalId: portalListCustomerModel!
+//                                               .data![index]!.id.toString(),
+//                                           BackupUser: portalListCustomerModel!
+//                                               .data![index]!.userId
+//                                               .toString(),)));
+//                               },
+//                               child: Container(
+//                                 padding: EdgeInsets.all(4.0),
+//                                 decoration: boxDecoration(
+//                                     bgColor: sh_btn_color,
+//                                     radius: 6,
+//                                     showShadow: true),
+//                                 child: text("VIEW BACKUPS",
+//                                     fontSize: 14.0,
+//                                     textColor: sh_app_black,
+//                                     isCentered: true,
+//                                     fontFamily: 'Bold'),
+//                               ),
+//                             ),
+//                           ),
+//                           Expanded(child: Container(
+//                             width: 8,
+//                           )),
+//                           Expanded(
+//                             flex: 2,
+//                             child: InkWell(
+//                               onTap: () async {
+//                                 Navigator.push(
+//                                   context,
+//                                   MaterialPageRoute(
+//                                       builder: (context) =>
+//                                           EditPortalScreen(
+//                                             PortalId: portalListCustomerModel!
+//                                                 .data![index]!.id.toString(),
+//                                             CustomerId: portalListCustomerModel!
+//                                                 .data![index]!.userId!
+//                                                 .toString(),
+//                                             UserIdName: portalListCustomerModel!
+//                                                 .data![index]!.username!
+//                                                 .toString(),
+//                                             Name: portalListCustomerModel!
+//                                                 .data![index]!.name!.toString(),
+//                                             Username: portalListCustomerModel!
+//                                                 .data![index]!.username!
+//                                                 .toString(),
+//                                             Password: portalListCustomerModel!
+//                                                 .data![index]!.password!
+//                                                 .toString(),
+//                                             Url: portalListCustomerModel!
+//                                                 .data![index]!.url!.toString(),
+//                                             Host: portalListCustomerModel!
+//                                                 .data![index]!.host!.toString(),
+//                                             Port: portalListCustomerModel!
+//                                                 .data![index]!.port!.toString(),
+//                                             RootFolder: portalListCustomerModel!
+//                                                 .data![index]!.rootFolder!
+//                                                 .toString(),
+//                                             StartDate: portalListCustomerModel!
+//                                                 .data![index]!.planStartDate!
+//                                                 .toString(),
+//                                             EndDate: portalListCustomerModel!
+//                                                 .data![index]!.planEndDate!
+//                                                 .toString(),
+//                                             mysqlUsername: portalListCustomerModel!
+//                                                 .data![index]!.mysqlUsername!
+//                                                 .toString(),
+//                                             mysqlPassword: portalListCustomerModel!
+//                                                 .data![index]!.mysqlPassword!
+//                                                 .toString(),
+//                                             mysqlHost: portalListCustomerModel!
+//                                                 .data![index]!.mysqlHost!
+//                                                 .toString(),
+//                                             mysqlPort: portalListCustomerModel!
+//                                                 .data![index]!.mysqlPort!
+//                                                 .toString(),
+//                                             mysqlDatabase: portalListCustomerModel!
+//                                                 .data![index]!.mysqlDatabase!
+//                                                 .toString(),
+//                                             PortalType: portalListCustomerModel!.data![index]!.portal_type==null?"":
+//                                             portalListCustomerModel!.data![index]!.portal_type,
+//                                           )),
+//                                 ).then((_) =>
+//                                     setState(() {}));
+//                               },
+//                               child: Container(
+//                                 padding: EdgeInsets.all(4.0),
+//                                 decoration: boxDecoration(
+//                                     bgColor: sh_btn_color,
+//                                     radius: 6,
+//                                     showShadow: true),
+//                                 child: text("EDIT PORTAL",
+//                                     fontSize: 14.0,
+//                                     textColor: sh_app_black,
+//                                     isCentered: true,
+//                                     fontFamily: 'Bold'),
+//                               ),
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(
+//                         height: 1,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 12,)
+//           ],
+//         ),
 //
-//                                                                 },
-//                                                                 child: Container(
-//                                                                   padding: EdgeInsets.all(4.0),
-//                                                                   decoration: boxDecoration(
-//                                                                       bgColor: sh_btn_color, radius: 6, showShadow: true),
-//                                                                   child: text("VIEW BACKUPS",
-//                                                                       fontSize: 14.0,
-//                                                                       textColor: sh_app_black,
-//                                                                       isCentered: true,
-//                                                                       fontFamily: 'Bold'),
-//                                                                 ),
-//                                                               ),
-//                                                             ),
-//                                                             Expanded(child: Container(
-//                                                               width: 8,
-//                                                             )),
-//                                                             Expanded(
-//                                                               flex: 2,
-//                                                               child: InkWell(
-//                                                                 onTap: () async {
-//                                                                   Navigator.push(
-//                                                                     context,
-//                                                                     MaterialPageRoute(
-//                                                                         builder: (context) => EditPortalScreen(
-//                                                                           PortalId: portalListCustomerModel!.data![index]!.id.toString(),
-//                                                                           CustomerId: portalListCustomerModel!.data![index]!.userId!.toString(),
-//                                                                           UserIdName: portalListCustomerModel!.data![index]!.username!.toString(),
-//                                                                           Name: portalListCustomerModel!.data![index]!.name!.toString(),
-//                                                                           Username: portalListCustomerModel!.data![index]!.username!.toString(),
-//                                                                           Password: portalListCustomerModel!.data![index]!.password!.toString(),
-//                                                                           Url: portalListCustomerModel!.data![index]!.url!.toString(),
-//                                                                           Host: portalListCustomerModel!.data![index]!.host!.toString(),
-//                                                                           Port: portalListCustomerModel!.data![index]!.port!.toString(),
-//                                                                           RootFolder: portalListCustomerModel!.data![index]!.rootFolder!.toString(),
-//                                                                           StartDate: portalListCustomerModel!.data![index]!.planStartDate!.toString(),
-//                                                                           EndDate: portalListCustomerModel!.data![index]!.planEndDate!.toString(),
-//                                                                           mysqlUsername: portalListCustomerModel!.data![index]!.mysqlUsername!.toString(),
-//                                                                           mysqlPassword: portalListCustomerModel!.data![index]!.mysqlPassword!.toString(),
-//                                                                           mysqlHost: portalListCustomerModel!.data![index]!.mysqlHost!.toString(),
-//                                                                           mysqlPort: portalListCustomerModel!.data![index]!.mysqlPort!.toString(),
-//                                                                           mysqlDatabase: portalListCustomerModel!.data![index]!.mysqlDatabase!.toString(),
-//                                                                         )),
-//                                                                   );
-//                                                                 },
-//                                                                 child: Container(
-//                                                                   padding: EdgeInsets.all(4.0),
-//                                                                   decoration: boxDecoration(
-//                                                                       bgColor: sh_btn_color, radius: 6, showShadow: true),
-//                                                                   child: text("EDIT PORTAL",
-//                                                                       fontSize: 14.0,
-//                                                                       textColor: sh_app_black,
-//                                                                       isCentered: true,
-//                                                                       fontFamily: 'Bold'),
-//                                                                 ),
-//                                                               ),
-//                                                             ),
-//                                                           ],
-//                                                         ),
-//                                                         SizedBox(
-//                                                           height: 1,
-//                                                         ),
-//                                                       ],
-//                                                     ),
-//                                                   ),
-//                                                 ),
-//                                               ),
-//                                               SizedBox(height: 12,)
-//                                             ],
-//                                           ),
+//       );
+//     }else{
+//       return Container();
+//     }
+//                                           }
+//                                       ),
+//                                     );
+//                                   }
 //
-//                                         );
-//                                       }
-//                                   );
+//
 //
 //                                 } else if (snapshot.hasError) {
 //                                   return Text("${snapshot.error}");

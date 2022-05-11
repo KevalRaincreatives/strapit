@@ -278,7 +278,7 @@ class _BackupFragmentState extends State<BackupFragment> {
       }
     }
 
-    void _openCustomDialog(int index) {
+    void _openCustomDialog(String backupid) {
       showGeneralDialog(barrierColor: Colors.black.withOpacity(0.5),
           transitionBuilder: (context, a1, a2, widget) {
             return Transform.scale(
@@ -297,7 +297,7 @@ class _BackupFragmentState extends State<BackupFragment> {
                         onTap: () async {
                           // BecameSeller();
                           Navigator.of(context, rootNavigator: true).pop();
-                          getAddRestore(listAllBackupModeldata![index]!.backupId!.toString());
+                          getAddRestore(backupid);
                          },
                         child: Container(
                           width: MediaQuery.of(context).size.width*.7,
@@ -352,7 +352,7 @@ class _BackupFragmentState extends State<BackupFragment> {
           children: [
             InkWell(
               onTap: () {
-                _openCustomDialog(index);
+                _openCustomDialog(listAllBackupModeldata![index]!.backupId!.toString());
                 // getAddRestore(listAllBackupModeldata![index]!.backupId!.toString());
               },
               child: Container(
@@ -387,7 +387,8 @@ class _BackupFragmentState extends State<BackupFragment> {
           children: [
             InkWell(
               onTap: () {
-                getAddRestore(listCustomerBackupModeldata![index]!.backupId!.toString());
+                _openCustomDialog(listCustomerBackupModeldata![index]!.backupId!.toString());
+                // getAddRestore(listCustomerBackupModeldata![index]!.backupId!.toString());
               },
               child: Container(
                 padding: EdgeInsets
@@ -731,94 +732,95 @@ class _BackupFragmentState extends State<BackupFragment> {
                                                       padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 8),
                                                       child: ListTile(
                                                         title: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                           crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
-                                                            Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text(
-                                                                  "Customer : " +
-                                                                      listCustomerBackupModeldata![index]!
-                                                                          .customerName!,
-                                                                  style: TextStyle(
-                                                                      color: sh_app_txt_color,
-                                                                      fontSize: 16,
-                                                                      fontFamily: 'Bold'),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                Text(
-                                                                  "Portal : " +
-                                                                      listCustomerBackupModeldata![index]!
-                                                                          .portalName!,
-                                                                  style: TextStyle(
-                                                                      color: sh_app_txt_color,
-                                                                      fontSize: 15,
-                                                                      fontFamily: 'Bold'),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                Text(
+                                                            Expanded(
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    "Customer : " +
+                                                                        listCustomerBackupModeldata![index]!
+                                                                            .customerName!,
+                                                                    style: TextStyle(
+                                                                        color: sh_app_txt_color,
+                                                                        fontSize: 16,
+                                                                        fontFamily: 'Bold'),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    "Portal : " +
+                                                                        listCustomerBackupModeldata![index]!
+                                                                            .portalName!,
+                                                                    style: TextStyle(
+                                                                        color: sh_app_txt_color,
+                                                                        fontSize: 15,
+                                                                        fontFamily: 'Bold'),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  Text(
+                                                                    listCustomerBackupModeldata![index]!
+                                                                        .backupId ==
+                                                                        null ? '' :
+                                                                    "Backup Id: " +
+                                                                        listCustomerBackupModeldata![index]!.backupId!.toString(),
+                                                                    style: TextStyle(
+                                                                        color: sh_app_txt_color,
+                                                                        fontSize: 15,
+                                                                        fontFamily: 'Bold'),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  SetBackupCustomerDate(index),
+                                                                  // Text(listCustomerBackupModeldata![index]!
+                                                                  //     .backupTime == null ? '' :
+                                                                  // "Backup : " +
+                                                                  //     listCustomerBackupModeldata![index]!
+                                                                  //         .backupTime!,
+                                                                  //   style: TextStyle(
+                                                                  //       color: sh_app_txt_color,
+                                                                  //       fontSize: 15,
+                                                                  //       fontFamily: 'Bold'),
+                                                                  // ),
+                                                                  SizedBox(
+                                                                    height: 4,
+                                                                  ),
+                                                                  Text(listCustomerBackupModeldata![index]!
+                                                                      .message == null ? '' :
                                                                   listCustomerBackupModeldata![index]!
-                                                                      .backupId ==
-                                                                      null ? '' :
-                                                                  "Backup Id: " +
-                                                                      listCustomerBackupModeldata![index]!.backupId!.toString(),
-                                                                  style: TextStyle(
-                                                                      color: sh_app_txt_color,
-                                                                      fontSize: 15,
-                                                                      fontFamily: 'Bold'),
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                SetBackupCustomerDate(index),
-                                                                // Text(listCustomerBackupModeldata![index]!
-                                                                //     .backupTime == null ? '' :
-                                                                // "Backup : " +
-                                                                //     listCustomerBackupModeldata![index]!
-                                                                //         .backupTime!,
-                                                                //   style: TextStyle(
-                                                                //       color: sh_app_txt_color,
-                                                                //       fontSize: 15,
-                                                                //       fontFamily: 'Bold'),
-                                                                // ),
-                                                                SizedBox(
-                                                                  height: 4,
-                                                                ),
-                                                                Text(listCustomerBackupModeldata![index]!
-                                                                    .message == null ? '' :
-                                                                listCustomerBackupModeldata![index]!
-                                                                    .message!,
-                                                                  style: TextStyle(
-                                                                      color: sh_green,
-                                                                      fontSize: 15,
-                                                                      fontFamily: 'Bold'),
-                                                                ),
-                                                                CheckRestoreCustomer(index),
-                                                                // SizedBox(
-                                                                //   height: 8,
-                                                                // ),
-                                                                // Container(
-                                                                //   padding: EdgeInsets.all(4.0),
-                                                                //   decoration: boxDecoration(
-                                                                //       bgColor: sh_btn_color,
-                                                                //       radius: 6,
-                                                                //       showShadow: true),
-                                                                //   child: text("Restore",
-                                                                //       fontSize: 15.0,
-                                                                //       textColor: sh_app_txt_color,
-                                                                //       isCentered: true,
-                                                                //       fontFamily: 'Bold'),
-                                                                // ),
+                                                                      .message!,
+                                                                    style: TextStyle(
+                                                                        color: sh_green,
+                                                                        fontSize: 15,
+                                                                        fontFamily: 'Bold'),
+                                                                  ),
+                                                                  CheckRestoreCustomer(index),
+                                                                  // SizedBox(
+                                                                  //   height: 8,
+                                                                  // ),
+                                                                  // Container(
+                                                                  //   padding: EdgeInsets.all(4.0),
+                                                                  //   decoration: boxDecoration(
+                                                                  //       bgColor: sh_btn_color,
+                                                                  //       radius: 6,
+                                                                  //       showShadow: true),
+                                                                  //   child: text("Restore",
+                                                                  //       fontSize: 15.0,
+                                                                  //       textColor: sh_app_txt_color,
+                                                                  //       isCentered: true,
+                                                                  //       fontFamily: 'Bold'),
+                                                                  // ),
 
-                                                                SizedBox(
-                                                                  height: 1,
-                                                                ),
-                                                              ],
+                                                                  SizedBox(
+                                                                    height: 1,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
 
                                                           ],

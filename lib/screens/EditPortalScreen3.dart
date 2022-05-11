@@ -12,7 +12,6 @@ import 'package:strapit/models/CustomerListModel.dart';
 import 'package:strapit/models/PortalAddFailModel.dart';
 import 'package:strapit/models/PortalAddModel.dart';
 import 'package:strapit/models/PortalTypeModel.dart';
-import 'package:strapit/models/ViewPortalModel.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
@@ -21,11 +20,11 @@ import 'package:http/http.dart';
 
 class EditPortalScreen extends StatefulWidget {
   static String tag='/EditPortalScreen';
-  final String? PortalId;
-  // final String? CustomerId,UserIdName,Name,Username,Password,Url,Host,Port,RootFolder,StartDate,EndDate,PortalType;
-  // final String? mysqlUsername,mysqlPassword,mysqlHost,mysqlPort,mysqlDatabase;
+  final String? PortalId,CustomerId,UserIdName,Name,Username,Password,Url,Host,Port,RootFolder,StartDate,EndDate,PortalType;
+  final String? mysqlUsername,mysqlPassword,mysqlHost,mysqlPort,mysqlDatabase;
 
-  EditPortalScreen({this.PortalId});
+  EditPortalScreen({this.PortalId,this.CustomerId,this.UserIdName,this.Name,this.Username,this.Password,this.Url,this.Host,this.Port,this.RootFolder,this.StartDate,this.EndDate,
+  this.mysqlUsername,this.mysqlPassword,this.mysqlHost,this.mysqlPort,this.mysqlDatabase,this.PortalType});
   // const EditPortalScreen({Key? key}) : super(key: key);
 
   @override
@@ -71,12 +70,10 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
   String portal_type='';
   int? IsAdmin;
   String? UserName='';
-  ViewPortalModel? viewPortalModel;
 
   void initState() {
     super.initState();
-    // fetchadd();
-    viewPortal();
+    fetchadd();
     // fetchCustomer();
     // disableCapture();
   }
@@ -302,7 +299,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       if(IsAdmin==1) {
         useridPortal =customerListModel!.data![selectedAddressIndex]!.id.toString();
       }else{
-        useridPortal=viewPortalModel!.data!.userId.toString();
+        useridPortal=widget.CustomerId!;
       }
       final msg = jsonEncode({"id":widget.PortalId,"username": username,"mysql_username":mysqlusername, "password": password,"mysql_password": mysqlpassword, "confirm_password": password,
         "name": name, "url": url, "port": port,"mysql_port":mysqlport, "root_folder": folder,"host":host,"mysql_host":mysqlhost,"mysql_database":mysqldatabase,
@@ -379,7 +376,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
 
       final msg = jsonEncode({"username": username, "password": password,
         "url": url, "port": port, "root_folder": folder,"host":host,
-        "portal_type":portal_type});
+        "portal_type":widget.PortalType});
 
 
 
@@ -456,7 +453,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
 
       final msg = jsonEncode({"username": username,"mysql_username":mysqlusername, "password": password,"mysql_password": mysqlpassword,
          "url": url, "port": port,"mysql_port":mysqlport, "root_folder": folder,"host":host,"mysql_host":mysqlhost,"mysql_database":mysqldatabase,
-        "portal_type":portal_type});
+        "portal_type":widget.PortalType});
 
       print(msg);
 
@@ -499,207 +496,51 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
   }
 
 
-  // Future<String?> fetchadd() async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //
-  //     final DateFormat format = new DateFormat("yyyy-MM-dd");
-  //
-  //     var yearString = DateFormat.yMMMMd('en_US')
-  //         .format(format.parse(widget.StartDate!))
-  //         .substring(DateFormat.yMMMMd('en_US')
-  //         .format(format.parse(widget.StartDate!))
-  //         .length -
-  //         4);
-  //     var monthstr;
-  //     var datestr;
-  //
-  //     if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
-  //         null &&
-  //         DateFormat.yMMMMd('en_US')
-  //             .format(format.parse(widget.StartDate!))
-  //             .length >=
-  //             6) {
-  //       datestr = DateFormat.yMMMMd('en_US')
-  //           .format(format.parse(widget.StartDate!))
-  //           .substring(
-  //           0,
-  //           DateFormat.yMMMMd('en_US')
-  //               .format(format.parse(widget.StartDate!))
-  //               .length -
-  //               6);
-  //       datestr = datestr.substring(datestr.length - 2);
-  //
-  //     }
-  //
-  //     if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
-  //         null &&
-  //         DateFormat.yMMMMd('en_US')
-  //             .format(format.parse(widget.StartDate!))
-  //             .length >=
-  //             8) {
-  //       monthstr = DateFormat.yMMMMd('en_US')
-  //           .format(format.parse(widget.StartDate!))
-  //           .substring(
-  //           0,
-  //           DateFormat.yMMMMd('en_US')
-  //               .format(format.parse(widget.StartDate!))
-  //               .length -
-  //               8);
-  //     }
-  //
-  //     pickdate = datestr;
-  //     pickmonth = monthstr;
-  //     pickyear = yearString;
-  //
-  //
-  //     var yearString2 = DateFormat.yMMMMd('en_US')
-  //         .format(format.parse(widget.EndDate!))
-  //         .substring(DateFormat.yMMMMd('en_US')
-  //         .format(format.parse(widget.EndDate!))
-  //         .length -
-  //         4);
-  //     var monthstr2;
-  //     var datestr2;
-  //
-  //     if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
-  //         null &&
-  //         DateFormat.yMMMMd('en_US')
-  //             .format(format.parse(widget.EndDate!))
-  //             .length >=
-  //             6) {
-  //       datestr2 = DateFormat.yMMMMd('en_US')
-  //           .format(format.parse(widget.EndDate!))
-  //           .substring(
-  //           0,
-  //           DateFormat.yMMMMd('en_US')
-  //               .format(format.parse(widget.EndDate!))
-  //               .length -
-  //               6);
-  //       datestr2 = datestr2.substring(datestr2.length - 2);
-  //
-  //     }
-  //
-  //     if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
-  //         null &&
-  //         DateFormat.yMMMMd('en_US')
-  //             .format(format.parse(widget.EndDate!))
-  //             .length >=
-  //             8) {
-  //       monthstr2 = DateFormat.yMMMMd('en_US')
-  //           .format(format.parse(widget.EndDate!))
-  //           .substring(
-  //           0,
-  //           DateFormat.yMMMMd('en_US')
-  //               .format(format.parse(widget.EndDate!))
-  //               .length -
-  //               8);
-  //     }
-  //
-  //     pickenddate = datestr2;
-  //     pickendmonth = monthstr2;
-  //     pickendyear = yearString2;
-  //
-  //
-  //     usernameCont.text=widget.Username!;
-  //     passwordCont.text=widget.Password!;
-  //     portCont.text=widget.Port!;
-  //     nameCont.text=widget.Name!;
-  //     folderCont.text=widget.RootFolder!;
-  //     urlCont.text=widget.Url!;
-  //     hostCont.text=widget.Host!;
-  //     selectedDate=format.parse(widget.StartDate!);
-  //     selectedendDate=format.parse(widget.EndDate!);
-  //     mysqlusernameCont.text=widget.mysqlUsername!;
-  //     mysqlpasswordCont.text=widget.mysqlPassword!;
-  //     mysqlhostCont.text=widget.mysqlHost!;
-  //     mysqlportCont.text=widget.mysqlPort!;
-  //     mysqldatabaseCont.text=widget.mysqlDatabase!;
-  //     portaltypeCont.text=widget.PortalType!;
-  //
-  //     // portaltypedetail = fetchPortalType();
-  //     UserName=prefs.getString("UserName");
-  //     IsAdmin=prefs.getInt("IsAdmin");
-  //     if(IsAdmin==1) {
-  //       fetchCustomer();
-  //     }else{
-  //       portaltypedetail = fetchPortalType();
-  //     }
-  //
-  //     return '';
-  //   } catch (e) {
-  //     print('caught error $e');
-  //   }
-  // }
-
-  Future<ViewPortalModel?> viewPortal() async {
-    EasyLoading.show(status: 'Please wait...');
+  Future<String?> fetchadd() async {
     try {
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      // String UserId = prefs.getString('UserId');
-      String? token = prefs.getString('token');
-      // add_from=prefs.getString("from");
-
-      Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      };
-      String? portalid=widget.PortalId!;
-
-
-      Response response =
-      await get(Uri.parse('https://strapit.rcstaging.co.in/strapit/public/api/viewPortal?id=$portalid'), headers: headers);
-
-      final jsonResponse = json.decode(response.body);
-      print('not json $jsonResponse');
-      viewPortalModel = new ViewPortalModel.fromJson(jsonResponse);
-      EasyLoading.dismiss();
-      // portaltypedetail = fetchPortalType();
-
 
       final DateFormat format = new DateFormat("yyyy-MM-dd");
 
       var yearString = DateFormat.yMMMMd('en_US')
-          .format(format.parse(viewPortalModel!.data!.planStartDate!))
+          .format(format.parse(widget.StartDate!))
           .substring(DateFormat.yMMMMd('en_US')
-          .format(format.parse(viewPortalModel!.data!.planStartDate!))
+          .format(format.parse(widget.StartDate!))
           .length -
           4);
       var monthstr;
       var datestr;
 
-      if (DateFormat.yMMMMd('en_US').format(format.parse(viewPortalModel!.data!.planStartDate!)) !=
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
           null &&
           DateFormat.yMMMMd('en_US')
-              .format(format.parse(viewPortalModel!.data!.planStartDate!))
+              .format(format.parse(widget.StartDate!))
               .length >=
               6) {
         datestr = DateFormat.yMMMMd('en_US')
-            .format(format.parse(viewPortalModel!.data!.planStartDate!))
+            .format(format.parse(widget.StartDate!))
             .substring(
             0,
             DateFormat.yMMMMd('en_US')
-                .format(format.parse(viewPortalModel!.data!.planStartDate!))
+                .format(format.parse(widget.StartDate!))
                 .length -
                 6);
         datestr = datestr.substring(datestr.length - 2);
 
       }
 
-      if (DateFormat.yMMMMd('en_US').format(format.parse(viewPortalModel!.data!.planStartDate!)) !=
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.StartDate!)) !=
           null &&
           DateFormat.yMMMMd('en_US')
-              .format(format.parse(viewPortalModel!.data!.planStartDate!))
+              .format(format.parse(widget.StartDate!))
               .length >=
               8) {
         monthstr = DateFormat.yMMMMd('en_US')
-            .format(format.parse(viewPortalModel!.data!.planStartDate!))
+            .format(format.parse(widget.StartDate!))
             .substring(
             0,
             DateFormat.yMMMMd('en_US')
-                .format(format.parse(viewPortalModel!.data!.planStartDate!))
+                .format(format.parse(widget.StartDate!))
                 .length -
                 8);
       }
@@ -710,44 +551,44 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
 
 
       var yearString2 = DateFormat.yMMMMd('en_US')
-          .format(format.parse(viewPortalModel!.data!.planEndDate!))
+          .format(format.parse(widget.EndDate!))
           .substring(DateFormat.yMMMMd('en_US')
-          .format(format.parse(viewPortalModel!.data!.planEndDate!))
+          .format(format.parse(widget.EndDate!))
           .length -
           4);
       var monthstr2;
       var datestr2;
 
-      if (DateFormat.yMMMMd('en_US').format(format.parse(viewPortalModel!.data!.planEndDate!)) !=
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
           null &&
           DateFormat.yMMMMd('en_US')
-              .format(format.parse(viewPortalModel!.data!.planEndDate!))
+              .format(format.parse(widget.EndDate!))
               .length >=
               6) {
         datestr2 = DateFormat.yMMMMd('en_US')
-            .format(format.parse(viewPortalModel!.data!.planEndDate!))
+            .format(format.parse(widget.EndDate!))
             .substring(
             0,
             DateFormat.yMMMMd('en_US')
-                .format(format.parse(viewPortalModel!.data!.planEndDate!))
+                .format(format.parse(widget.EndDate!))
                 .length -
                 6);
         datestr2 = datestr2.substring(datestr2.length - 2);
 
       }
 
-      if (DateFormat.yMMMMd('en_US').format(format.parse(viewPortalModel!.data!.planEndDate!)) !=
+      if (DateFormat.yMMMMd('en_US').format(format.parse(widget.EndDate!)) !=
           null &&
           DateFormat.yMMMMd('en_US')
-              .format(format.parse(viewPortalModel!.data!.planEndDate!))
+              .format(format.parse(widget.EndDate!))
               .length >=
               8) {
         monthstr2 = DateFormat.yMMMMd('en_US')
-            .format(format.parse(viewPortalModel!.data!.planEndDate!))
+            .format(format.parse(widget.EndDate!))
             .substring(
             0,
             DateFormat.yMMMMd('en_US')
-                .format(format.parse(viewPortalModel!.data!.planEndDate!))
+                .format(format.parse(widget.EndDate!))
                 .length -
                 8);
       }
@@ -757,21 +598,21 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       pickendyear = yearString2;
 
 
-      usernameCont.text=viewPortalModel!.data!.username!;
-      passwordCont.text=viewPortalModel!.data!.password!;
-      portCont.text=viewPortalModel!.data!.port!;
-      nameCont.text=viewPortalModel!.data!.name!;
-      folderCont.text=viewPortalModel!.data!.rootFolder!;
-      urlCont.text=viewPortalModel!.data!.url!;
-      hostCont.text=viewPortalModel!.data!.host!;
-      selectedDate=format.parse(viewPortalModel!.data!.planStartDate!);
-      selectedendDate=format.parse(viewPortalModel!.data!.planEndDate!);
-      mysqlusernameCont.text=viewPortalModel!.data!.mysqlUsername!;
-      mysqlpasswordCont.text=viewPortalModel!.data!.mysqlPassword!;
-      mysqlhostCont.text=viewPortalModel!.data!.mysqlHost!;
-      mysqlportCont.text=viewPortalModel!.data!.mysqlPort!;
-      mysqldatabaseCont.text=viewPortalModel!.data!.mysqlDatabase!;
-      portaltypeCont.text=viewPortalModel!.data!.portalType!;
+      usernameCont.text=widget.Username!;
+      passwordCont.text=widget.Password!;
+      portCont.text=widget.Port!;
+      nameCont.text=widget.Name!;
+      folderCont.text=widget.RootFolder!;
+      urlCont.text=widget.Url!;
+      hostCont.text=widget.Host!;
+      selectedDate=format.parse(widget.StartDate!);
+      selectedendDate=format.parse(widget.EndDate!);
+      mysqlusernameCont.text=widget.mysqlUsername!;
+      mysqlpasswordCont.text=widget.mysqlPassword!;
+      mysqlhostCont.text=widget.mysqlHost!;
+      mysqlportCont.text=widget.mysqlPort!;
+      mysqldatabaseCont.text=widget.mysqlDatabase!;
+      portaltypeCont.text=widget.PortalType!;
 
       // portaltypedetail = fetchPortalType();
       UserName=prefs.getString("UserName");
@@ -782,14 +623,11 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
         portaltypedetail = fetchPortalType();
       }
 
-
-      return viewPortalModel;
+      return '';
     } catch (e) {
-      EasyLoading.dismiss();
       print('caught error $e');
     }
   }
-
 
   Future<CustomerListModel?> fetchCustomer() async {
     EasyLoading.show(status: 'Please wait...');
@@ -813,10 +651,10 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       final jsonResponse = json.decode(response.body);
       print('not json $jsonResponse');
       customerListModel = new CustomerListModel.fromJson(jsonResponse);
-      // String gg=widget.UserIdName!;
-      // print(gg);
+      String gg=widget.UserIdName!;
+      print(gg);
       for (var i = 0; i < customerListModel!.data!.length; i++) {
-        if (customerListModel!.data![i]!.id == viewPortalModel!.data!.userId) {
+        if (customerListModel!.data![i]!.name == gg) {
           selectedUserIndex = i;
           selectedAddressIndex=i;
         }
@@ -857,7 +695,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
       // print(_addressModel!.data);
 
       for (var i = 0; i < portalTypeModel!.data!.portalTypes!.length; i++) {
-        if (portalTypeModel!.data!.portalTypes![i]!.type == viewPortalModel!.data!.portalType) {
+        if (portalTypeModel!.data!.portalTypes![i]!.type == widget.PortalType) {
           selectedValue = portalTypeModel!.data!.portalTypes![i];
           portal_type=portalTypeModel!.data!.portalTypes![i]!.type!;
         }
@@ -1057,7 +895,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
         );
       }else{
 
-        // String userss=widget.Username!;
+        String userss=widget.Username!;
         // String userss = customerListModel!.data![selectedUserIndex]!.name!;
 
         return InkWell(
@@ -1555,7 +1393,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                                       // TODO submit
                                       if (_formKey2.currentState!.validate()) {
                                         // TODO submit
-                                        if(portal_type==''){
+                                        if(widget.PortalType==''){
                                           toast("Please Select Portal Type");
                                         }else {
                                           FocusScope.of(context).requestFocus(
@@ -1823,7 +1661,7 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                                       if (_formKey2.currentState!.validate()) {
                                         // TODO submit
                                         if (_formKey3.currentState!.validate()) {
-                                          if (portal_type == '') {
+                                          if (widget.PortalType == '') {
                                             toast("Please Select Portal Type");
                                           } else {
                                             FocusScope.of(context).requestFocus(

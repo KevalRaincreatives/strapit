@@ -50,6 +50,87 @@ class _AdminDashoardScreenState extends State<AdminDashoardScreen> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
+    void _openCustomDialog() {
+      showGeneralDialog(barrierColor: Colors.black.withOpacity(0.5),
+          transitionBuilder: (context, a1, a2, widget) {
+            return Transform.scale(
+              scale: a1.value,
+              child: Opacity(
+                opacity: a1.value,
+                child: AlertDialog(
+                  shape: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0)),
+                  title: Center(child: Column(
+                    children: [
+                      Text('Logout',style: TextStyle(color: sh_app_black,fontSize: 28,fontFamily: 'Bold'),textAlign: TextAlign.center,),
+                      SizedBox(height: 8,),
+                      Text('Are you sure,do you want to logout?',style: TextStyle(color: sh_app_black,fontSize: 18,fontFamily: 'Bold'),textAlign: TextAlign.center,),
+                    ],
+                  )),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10,),
+                      InkWell(
+                        onTap: () async {
+                          // BecameSeller();
+                          Navigator.of(context, rootNavigator: true).pop();
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          prefs.setString('UserId', "");
+                          prefs.setString('token', "");
+
+                          Route route = MaterialPageRoute(
+                              builder: (context) => LoginScreen());
+                          Navigator.pushReplacement(context, route);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*.7,
+                          padding: EdgeInsets.only(
+                              top: 6, bottom: 10),
+                          decoration: boxDecoration(
+                              bgColor: sh_btn_color, radius: 10, showShadow: true),
+                          child: text("Logout",
+                              fontSize: 16.0,
+                              textColor: sh_app_black,
+                              isCentered: true,
+                              fontFamily: 'Bold'),
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      InkWell(
+                        onTap: () async {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width*.7,
+                          padding: EdgeInsets.only(
+                              top: 6, bottom: 10),
+                          decoration: BoxDecoration(
+                            color: sh_white,border: Border.all(color: sh_app_black, width: 1.0),borderRadius: BorderRadius.circular(8),),
+                          child: text("Cancel",
+                              fontSize: 16.0,
+                              textColor: sh_app_black,
+                              isCentered: true,
+                              fontFamily: 'Bold'),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          transitionDuration: Duration(milliseconds: 200),
+          barrierDismissible: true,
+          barrierLabel: '',
+          context: context,
+          pageBuilder: (context, animation1, animation2) {
+            return Container();
+          });
+    }
+
+
     return Scaffold(
 
       body: WillPopScope(
@@ -72,13 +153,14 @@ class _AdminDashoardScreenState extends State<AdminDashoardScreen> {
                           child: Image.asset(sh_app_logo)),
                       InkWell(
                         onTap: () async{
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          prefs.setString('UserId', "");
-                          prefs.setString('token', "");
-
-                          Route route = MaterialPageRoute(
-                              builder: (context) => LoginScreen());
-                          Navigator.pushReplacement(context, route);
+                          // SharedPreferences prefs = await SharedPreferences.getInstance();
+                          // prefs.setString('UserId', "");
+                          // prefs.setString('token', "");
+                          //
+                          // Route route = MaterialPageRoute(
+                          //     builder: (context) => LoginScreen());
+                          // Navigator.pushReplacement(context, route);
+                          _openCustomDialog();
                         },
                           child: Icon(Icons.logout,size: 40,color: sh_app_black,))
                     ],

@@ -599,64 +599,7 @@ else {
                                                 EditPortalScreen(
                                                   PortalId: portalListModel!
                                                       .data![index]!.id
-                                                      .toString(),
-                                                  CustomerId: portalListModel!
-                                                      .data![index]!.userId!
-                                                      .toString(),
-                                                  UserIdName: portalListModel!
-                                                      .data![index]!.customerName!
-                                                      .toString(),
-                                                  Name: portalListModel!
-                                                      .data![index]!
-                                                      .name!.toString(),
-                                                  Username: portalListModel!
-                                                      .data![index]!.username!
-                                                      .toString(),
-                                                  Password: portalListModel!
-                                                      .data![index]!.password!
-                                                      .toString(),
-                                                  Url: portalListModel!
-                                                      .data![index]!
-                                                      .url!.toString(),
-                                                  Host: portalListModel!
-                                                      .data![index]!
-                                                      .host!.toString(),
-                                                  Port: portalListModel!
-                                                      .data![index]!
-                                                      .port!.toString(),
-                                                  RootFolder: portalListModel!
-                                                      .data![index]!.rootFolder!
-                                                      .toString(),
-                                                  StartDate: portalListModel!
-                                                      .data![index]!
-                                                      .planStartDate!
-                                                      .toString(),
-                                                  EndDate: portalListModel!
-                                                      .data![index]!
-                                                      .planEndDate!
-                                                      .toString(),
-                                                  mysqlUsername: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlUsername!
-                                                      .toString(),
-                                                  mysqlPassword: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlPassword!
-                                                      .toString(),
-                                                  mysqlHost: portalListModel!
-                                                      .data![index]!.mysqlHost!
-                                                      .toString(),
-                                                  mysqlPort: portalListModel!
-                                                      .data![index]!.mysqlPort!
-                                                      .toString(),
-                                                  mysqlDatabase: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlDatabase!
-                                                      .toString(),
-                                                  PortalType: portalListModel!.data![index]!.portal_type==null?"":
-                                                    portalListModel!
-                                                      .data![index]!.portal_type!
-                                                      .toString(),
+                                                      .toString()
                                                 )),
                                       ).then((_) =>
                                           setState(() {}));
@@ -851,62 +794,7 @@ else {
                                                 EditPortalScreen(
                                                   PortalId: portalListModel!
                                                       .data![index]!.id
-                                                      .toString(),
-                                                  CustomerId: portalListModel!
-                                                      .data![index]!.userId!
-                                                      .toString(),
-                                                  UserIdName: portalListModel!
-                                                      .data![index]!.customerName!
-                                                      .toString(),
-                                                  Name: portalListModel!
-                                                      .data![index]!
-                                                      .name!.toString(),
-                                                  Username: portalListModel!
-                                                      .data![index]!.username!
-                                                      .toString(),
-                                                  Password: portalListModel!
-                                                      .data![index]!.password!
-                                                      .toString(),
-                                                  Url: portalListModel!
-                                                      .data![index]!
-                                                      .url!.toString(),
-                                                  Host: portalListModel!
-                                                      .data![index]!
-                                                      .host!.toString(),
-                                                  Port: portalListModel!
-                                                      .data![index]!
-                                                      .port!.toString(),
-                                                  RootFolder: portalListModel!
-                                                      .data![index]!.rootFolder!
-                                                      .toString(),
-                                                  StartDate: portalListModel!
-                                                      .data![index]!
-                                                      .planStartDate!
-                                                      .toString(),
-                                                  EndDate: portalListModel!
-                                                      .data![index]!
-                                                      .planEndDate!
-                                                      .toString(),
-                                                  mysqlUsername: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlUsername!
-                                                      .toString(),
-                                                  mysqlPassword: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlPassword!
-                                                      .toString(),
-                                                  mysqlHost: portalListModel!
-                                                      .data![index]!.mysqlHost!
-                                                      .toString(),
-                                                  mysqlPort: portalListModel!
-                                                      .data![index]!.mysqlPort!
-                                                      .toString(),
-                                                  mysqlDatabase: portalListModel!
-                                                      .data![index]!
-                                                      .mysqlDatabase!
-                                                      .toString(),
-                                                  PortalType: portalListModel!.data![index]!.portal_type==null?"":
-                                                  portalListModel!.data![index]!.portal_type,
+                                                      .toString()
                                                 )),
                                       ).then((_) =>
                                           setState(() {}));
@@ -1191,55 +1079,7 @@ else {
                                       builder: (context) =>
                                           EditPortalScreen(
                                             PortalId: portalListCustomerModel!
-                                                .data![index]!.id.toString(),
-                                            CustomerId: portalListCustomerModel!
-                                                .data![index]!.userId!
-                                                .toString(),
-                                            UserIdName: portalListCustomerModel!
-                                                .data![index]!.username!
-                                                .toString(),
-                                            Name: portalListCustomerModel!
-                                                .data![index]!.name!.toString(),
-                                            Username: portalListCustomerModel!
-                                                .data![index]!.username!
-                                                .toString(),
-                                            Password: portalListCustomerModel!
-                                                .data![index]!.password!
-                                                .toString(),
-                                            Url: portalListCustomerModel!
-                                                .data![index]!.url!.toString(),
-                                            Host: portalListCustomerModel!
-                                                .data![index]!.host!.toString(),
-                                            Port: portalListCustomerModel!
-                                                .data![index]!.port!.toString(),
-                                            RootFolder: portalListCustomerModel!
-                                                .data![index]!.rootFolder!
-                                                .toString(),
-                                            StartDate: portalListCustomerModel!
-                                                .data![index]!.planStartDate!
-                                                .toString(),
-                                            EndDate: portalListCustomerModel!
-                                                .data![index]!.planEndDate!
-                                                .toString(),
-                                            mysqlUsername: portalListCustomerModel!
-                                                .data![index]!.mysqlUsername!
-                                                .toString(),
-                                            mysqlPassword: portalListCustomerModel!
-                                                .data![index]!.mysqlPassword!
-                                                .toString(),
-                                            mysqlHost: portalListCustomerModel!
-                                                .data![index]!.mysqlHost!
-                                                .toString(),
-                                            mysqlPort: portalListCustomerModel!
-                                                .data![index]!.mysqlPort!
-                                                .toString(),
-                                            mysqlDatabase: portalListCustomerModel!
-                                                .data![index]!.mysqlDatabase!
-                                                .toString(),
-                                            PortalType: portalListCustomerModel!.data![index]!.portal_type==null?"":
-                                            portalListCustomerModel!
-                                                .data![index]!.portal_type!
-                                                .toString(),
+                                                .data![index]!.id.toString()
                                           )),
                                 ).then((_) =>
                                     setState(() {}));
@@ -1401,53 +1241,7 @@ else {
                                       builder: (context) =>
                                           EditPortalScreen(
                                             PortalId: portalListCustomerModel!
-                                                .data![index]!.id.toString(),
-                                            CustomerId: portalListCustomerModel!
-                                                .data![index]!.userId!
-                                                .toString(),
-                                            UserIdName: portalListCustomerModel!
-                                                .data![index]!.username!
-                                                .toString(),
-                                            Name: portalListCustomerModel!
-                                                .data![index]!.name!.toString(),
-                                            Username: portalListCustomerModel!
-                                                .data![index]!.username!
-                                                .toString(),
-                                            Password: portalListCustomerModel!
-                                                .data![index]!.password!
-                                                .toString(),
-                                            Url: portalListCustomerModel!
-                                                .data![index]!.url!.toString(),
-                                            Host: portalListCustomerModel!
-                                                .data![index]!.host!.toString(),
-                                            Port: portalListCustomerModel!
-                                                .data![index]!.port!.toString(),
-                                            RootFolder: portalListCustomerModel!
-                                                .data![index]!.rootFolder!
-                                                .toString(),
-                                            StartDate: portalListCustomerModel!
-                                                .data![index]!.planStartDate!
-                                                .toString(),
-                                            EndDate: portalListCustomerModel!
-                                                .data![index]!.planEndDate!
-                                                .toString(),
-                                            mysqlUsername: portalListCustomerModel!
-                                                .data![index]!.mysqlUsername!
-                                                .toString(),
-                                            mysqlPassword: portalListCustomerModel!
-                                                .data![index]!.mysqlPassword!
-                                                .toString(),
-                                            mysqlHost: portalListCustomerModel!
-                                                .data![index]!.mysqlHost!
-                                                .toString(),
-                                            mysqlPort: portalListCustomerModel!
-                                                .data![index]!.mysqlPort!
-                                                .toString(),
-                                            mysqlDatabase: portalListCustomerModel!
-                                                .data![index]!.mysqlDatabase!
-                                                .toString(),
-                                            PortalType: portalListCustomerModel!.data![index]!.portal_type==null?"":
-                                            portalListCustomerModel!.data![index]!.portal_type,
+                                                .data![index]!.id.toString()
                                           )),
                                 ).then((_) =>
                                     setState(() {}));
