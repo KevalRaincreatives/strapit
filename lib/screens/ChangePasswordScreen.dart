@@ -40,7 +40,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         .then((querySnapshot) {
       querySnapshot.docs.forEach((documentSnapshot) {
         documentSnapshot.reference.update({
-          'Password': passwordCont.text!,
+          'Password': passwordCont.text,
         });
       });
     });

@@ -41,7 +41,7 @@ class _AddTicketScreenState extends State<AddTicketScreen> {
       'GenerateByEmail': prefs.getString('UserEmail'),
       'DateTimeBy': c_dt,
       'UserId':prefs.getString('UserId'),
-      'AdminUserId':'EwkjEI0TlBFhx0naqqG3'
+      'AdminUserId':'m6SOpds2ZxPKMLiDQj7f'
     });
 
     await groupDocRef.update({

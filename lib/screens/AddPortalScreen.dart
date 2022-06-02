@@ -59,6 +59,9 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
   PortalTypeModel? portalTypeModel;
   PortalTypeModelDataPortalTypes? selectedValue;
   String portal_type='';
+  int? IsAdmin,MainUserId;
+  String? UserName;
+
 
   void initState() {
     super.initState();
@@ -359,10 +362,19 @@ class _AddPortalScreenState extends State<AddPortalScreen> {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       };
+      String useridPortal='';
+      IsAdmin=prefs.getInt("IsAdmin");
+      MainUserId=prefs.getInt("MainUserId");
+      if(IsAdmin==1) {
+        useridPortal =customerListModel!.data![selectedAddressIndex]!.id.toString();
+      }else{
+        useridPortal=MainUserId.toString();
+      }
+
 
       final msg = jsonEncode({"username": usernameCont.text,"mysql_username":mysqlusernameCont.text, "password": passwordCont.text,"mysql_password": mysqlpasswordCont.text, "confirm_password": passwordCont.text,
         "name": nameCont.text, "url": urlCont.text, "port": portCont.text,"mysql_port":mysqlportCont.text, "root_folder": folderCont.text,"host":hostCont.text,"mysql_host":mysqlhostCont.text,"mysql_database":mysqldatabaseCont.text,
-        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":customerListModel!.data![selectedAddressIndex]!.id.toString(),"portal_type":portal_type});
+        "plan_start_date":selectedDate.toString().substring(0, 10),"plan_end_date":selectedendDate.toString().substring(0, 10),"user_id":useridPortal,"portal_type":portal_type});
 
       // final msg = jsonEncode({"username": "mocorcs","mysql_username":"mocorcs_mocousr", "password": "vpEdZ3PUiG8D","mysql_password": "ufQ3sZyIusm5", "confirm_password": "vpEdZ3PUiG8D",
       //   "name": nameCont.text, "url": "moco.rcstaging.co.in", "port": "8853","mysql_port":"3306", "root_folder": "public_html","host":"localhost","mysql_host":"localhost","mysql_database":"mocorcs_mocodb",
@@ -435,6 +447,9 @@ Navigator.pop(context);
       // String UserId = prefs.getString('UserId');
       String? token = prefs.getString('token');
       // add_from=prefs.getString("from");
+      IsAdmin=prefs.getInt("IsAdmin");
+      MainUserId=prefs.getInt("MainUserId");
+      UserName=prefs.getString("UserName");
 
       Map<String, String> headers = {
         'Content-Type': 'application/json',
@@ -450,6 +465,8 @@ Navigator.pop(context);
       print('not json $jsonResponse');
       customerListModel = new CustomerListModel.fromJson(jsonResponse);
       // print(_addressModel!.data);
+
+
 
 
       return customerListModel;
@@ -615,12 +632,21 @@ Navigator.pop(context);
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
     final node = FocusScope.of(context);
 
     ShowDlg2() {
-      var height2 = MediaQuery.of(context).size.height;
+      var height2 = MediaQuery
+          .of(context)
+          .size
+          .height;
 
 
       return showGeneralDialog(
@@ -652,10 +678,12 @@ Navigator.pop(context);
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: customerListModel!.data!.length,
+                                      itemCount: customerListModel!.data!
+                                          .length,
                                       itemBuilder: (context, index) {
                                         return Container(
-                                          padding: EdgeInsets.all(textSizeSmall),
+                                          padding: EdgeInsets.all(
+                                              textSizeSmall),
                                           margin: EdgeInsets.only(
                                             right: spacing_standard,
                                             left: spacing_standard,
@@ -666,42 +694,80 @@ Navigator.pop(context);
                                               color: sh_white
                                           ),
                                           child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment
+                                                .start,
                                             children: <Widget>[
                                               Radio(
                                                   value: index,
                                                   groupValue: selectedAddressIndex,
                                                   onChanged: (int? value) {
                                                     setState2(() {
-                                                      selectedAddressIndex = value!;
-                                                      selectedUserIndex= value;
+                                                      selectedAddressIndex =
+                                                      value!;
+                                                      selectedUserIndex = value;
                                                     });
                                                   },
                                                   activeColor: sh_colorPrimary2),
                                               Expanded(
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                  crossAxisAlignment: CrossAxisAlignment
+                                                      .stretch,
                                                   children: [
                                                     Container(
 
 
                                                       child: Padding(
-                                                        padding: const EdgeInsets.fromLTRB(8.0,8,8,8),
+                                                        padding: const EdgeInsets
+                                                            .fromLTRB(
+                                                            8.0, 8, 8, 8),
                                                         child: Container(
-                                                          padding: EdgeInsets.fromLTRB(12,6,12,6),
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(12, 6,
+                                                              12, 6),
                                                           child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment
+                                                                .start,
+                                                            mainAxisAlignment: MainAxisAlignment
+                                                                .start,
                                                             children: [
-                                                              Text(customerListModel!.data![index]!.name!,
-                                                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: sh_app_black)),
-                                                              SizedBox(height: 6,),
-                                                              Text(customerListModel!.data![index]!.email!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                                              SizedBox(height: 2,),
-                                                              Text(customerListModel!.data![index]!.country!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                                              SizedBox(height: 2,),
-                                                              Text(customerListModel!.data![index]!.phone!,style: TextStyle(fontSize: 16,color: sh_app_black)),
-                                                              SizedBox(height: 2,),
+                                                              Text(
+                                                                  customerListModel!
+                                                                      .data![index]!
+                                                                      .name!,
+                                                                  style: TextStyle(
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      fontSize: 20,
+                                                                      color: sh_app_black)),
+                                                              SizedBox(
+                                                                height: 6,),
+                                                              Text(
+                                                                  customerListModel!
+                                                                      .data![index]!
+                                                                      .email!,
+                                                                  style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      color: sh_app_black)),
+                                                              SizedBox(
+                                                                height: 2,),
+                                                              Text(
+                                                                  customerListModel!
+                                                                      .data![index]!
+                                                                      .country!,
+                                                                  style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      color: sh_app_black)),
+                                                              SizedBox(
+                                                                height: 2,),
+                                                              Text(
+                                                                  customerListModel!
+                                                                      .data![index]!
+                                                                      .phone!,
+                                                                  style: TextStyle(
+                                                                      fontSize: 16,
+                                                                      color: sh_app_black)),
+                                                              SizedBox(
+                                                                height: 2,),
 
                                                             ],),
                                                         ),
@@ -723,32 +789,38 @@ Navigator.pop(context);
                               ),
                             ),
                             Positioned(
-                              bottom: 0,
-                              child: Container(
-                                height: 60,
-                                width: width,
-                                margin: EdgeInsets.only(top: 4),
-                                decoration: BoxDecoration(color: sh_white),
-                                child: InkWell(
-                                  onTap: () async {
-                                    Navigator.of(context).pop(ConfirmAction.CANCEL);
-                                    // getRegister();
+                                bottom: 0,
+                                child: Container(
+                                  height: 60,
+                                  width: width,
+                                  margin: EdgeInsets.only(top: 4),
+                                  decoration: BoxDecoration(color: sh_white),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      Navigator.of(context).pop(
+                                          ConfirmAction.CANCEL);
+                                      // getRegister();
 // MyCheck();
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.only(
-                                        top: 6, bottom: 10),
-                                    decoration: boxDecoration(
-                                        bgColor: sh_btn_color, radius: 10, showShadow: true),
-                                    child: text("Select",
-                                        fontSize: 24.0,
-                                        textColor: sh_app_txt_color,
-                                        isCentered: true,
-                                        fontFamily: 'Bold'),
+                                    },
+                                    child: Container(
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width,
+                                      padding: EdgeInsets.only(
+                                          top: 6, bottom: 10),
+                                      decoration: boxDecoration(
+                                          bgColor: sh_btn_color,
+                                          radius: 10,
+                                          showShadow: true),
+                                      child: text("Select",
+                                          fontSize: 24.0,
+                                          textColor: sh_app_txt_color,
+                                          isCentered: true,
+                                          fontFamily: 'Bold'),
+                                    ),
                                   ),
-                                ),
-                              )
+                                )
                             ),
                           ],
                         ),
@@ -766,49 +838,72 @@ Navigator.pop(context);
       );
     }
 
-    UserSelection(){
-      if(selectedUserIndex==-1){
-    return InkWell(
-      onTap: () async{
-        ShowDlg2();
+    UserSelection() {
+      if (IsAdmin == 1) {
 
-
-      },
-      child: Container(
-        padding: EdgeInsets.fromLTRB(
-            spacing_standard_new,16,
-            spacing_standard_new,16),
-        decoration:
-        BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("Select User",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
-            Icon(Icons.keyboard_arrow_right)
-          ],
+    if (selectedUserIndex == -1) {
+      return InkWell(
+        onTap: () async {
+          ShowDlg2();
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+              spacing_standard_new, 16,
+              spacing_standard_new, 16),
+          decoration:
+          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("Select User", style: TextStyle(
+                  color: sh_app_txt_color, fontSize: 16, fontFamily: 'Bold'),),
+              Icon(Icons.keyboard_arrow_right)
+            ],
+          ),
         ),
-      ),
-    );
-      }else{
-        String userss=customerListModel!.data![selectedUserIndex]!.name!;
+      );
+    } else {
+      String userss = customerListModel!.data![selectedUserIndex]!.name!;
 
+      return InkWell(
+        onTap: () async {
+          ShowDlg2();
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(
+              spacing_standard_new, 16,
+              spacing_standard_new, 16),
+          decoration:
+          BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("Change User\n$userss", style: TextStyle(
+                  color: sh_app_txt_color, fontSize: 16, fontFamily: 'Bold'),),
+              Icon(Icons.keyboard_arrow_right)
+            ],
+          ),
+        ),
+      );
+    }
+  }else{
         return InkWell(
-          onTap: () async{
-            ShowDlg2();
-
-
+          onTap: () async {
+            // ShowDlg2();
           },
           child: Container(
             padding: EdgeInsets.fromLTRB(
-                spacing_standard_new,16,
-                spacing_standard_new,16),
+                spacing_standard_new, 16,
+                spacing_standard_new, 16),
             decoration:
             BoxDecoration(border: Border.all(color: sh_app_black, width: 1.0)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Change User\n$userss",style: TextStyle(color: sh_app_txt_color,fontSize: 16,fontFamily: 'Bold'),),
-                Icon(Icons.keyboard_arrow_right)
+                Text("User Name\n$UserName", style: TextStyle(
+                    color: sh_app_txt_color,
+                    fontSize: 16,
+                    fontFamily: 'Bold'),),
               ],
             ),
           ),
@@ -1568,10 +1663,14 @@ Form(
                     SizedBox(height: 42,),
                     InkWell(
                       onTap: () async {
-                        if(selectedUserIndex==-1){
-                          toast("Select User");
-                        }else {
-                          // toast(customerListModel!.data![selectedAddressIndex]!.name);
+                        if(IsAdmin==1) {
+                          if (selectedUserIndex == -1) {
+                            toast("Select User");
+                          } else {
+                            // toast(customerListModel!.data![selectedAddressIndex]!.name);
+                            getAddPortal();
+                          }
+                        }else{
                           getAddPortal();
                         }
 // MyCheck();

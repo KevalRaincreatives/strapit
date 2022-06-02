@@ -29,7 +29,8 @@ Future<void>  main() async {
   await Firebase.initializeApp();
   // FirebaseMessaging.onBackgroundMessage(_messageHandler);
 
-
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: sh_colorPrimary2,
   ));

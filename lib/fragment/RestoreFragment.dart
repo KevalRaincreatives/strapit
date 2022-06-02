@@ -1306,7 +1306,62 @@ class _RestoreFragmentState extends State<RestoreFragment> {
             ],
           ),
         );
-      } else {
+      }
+      else if (listResortModel2![index]!.status == 10) {
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.check_circle,
+                    color: sh_green,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    "Scheduled",
+                    style: TextStyle(
+                        color: sh_app_black, fontFamily: 'Bold', fontSize: 16),
+                  )
+                ],
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                height: 20,
+                color: sh_grey,
+                width: 1.5,
+              ),
+
+              Row(
+                children: [
+                  Icon(
+                    Icons.check_circle,
+                    color: sh_red,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    listResortModel2![index]!.message!,
+                    style: TextStyle(
+                        color: sh_red,
+                        fontFamily: 'Regular',
+                        fontSize: 16),
+                  )
+                ],
+              ),
+
+            ],
+          ),
+        );
+      }
+      else {
         return Container();
       }
     }

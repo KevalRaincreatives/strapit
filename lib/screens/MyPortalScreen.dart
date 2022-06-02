@@ -317,7 +317,8 @@ class _MyPortalScreenState extends State<MyPortalScreen> {
                           children: [
                             GestureDetector(
                               onTap: () async{
-                                launchScreen(context, AddPortalScreen.tag);
+                                // launchScreen(context, AddPortalScreen.tag);
+                                Navigator.pushNamed(context, AddPortalScreen.tag).then((_) => setState(() {}));
                               },
                               child: Container(
                                 // color: sh_app_black,
@@ -860,6 +861,53 @@ else {
                   backgroundColor: sh_white,
                   iconTheme: IconThemeData(color: sh_textColorPrimary),
                   actionsIconTheme: IconThemeData(color: sh_white),
+                  actions: <Widget>[
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0,0,16.0,0),
+                        child: Wrap(
+                          children: [
+                            GestureDetector(
+                              onTap: () async{
+                                // launchScreen(context, AddPortalScreen.tag);
+                                Navigator.pushNamed(context, AddPortalScreen.tag).then((_) => setState(() {}));
+                              },
+                              child: Container(
+                                // color: sh_app_black,
+                                  child: Image.asset(sh_plus,height:40,width: 40,)),
+                            )
+
+                            //   GestureDetector(
+                            //   onTap: () async{
+                            //     // Navigator.pushNamed(context, AddTicketScreen.tag).then((_) => setState(() {}));
+                            //     launchScreen(context, AddPortalScreen.tag);
+                            //     // CreateOrder(widget.podCastModel2![index].id!, widget.podCastModel2![index].downloadCost!);
+                            //   },
+                            //   child: Container(
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(2),
+                            //       color: sh_btn_color,
+                            //     ),
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.all(6.0),
+                            //       child: Center(
+                            //         child: Text(
+                            //           "Add",
+                            //           style: TextStyle(
+                            //             color: sh_app_txt_color,
+                            //             fontSize: 15,
+                            //             fontFamily: "Bold",
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
 
                 ),
                 body:
