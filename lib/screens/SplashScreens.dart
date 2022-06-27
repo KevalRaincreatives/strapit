@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/screens/AdminDashoardScreen.dart';
 import 'package:strapit/screens/CustmerDashoardScreen.dart';
@@ -9,6 +11,7 @@ import 'package:strapit/screens/LoginScreen.dart';
 import 'package:strapit/utils/ShColors.dart';
 import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 class SplashScreens extends StatefulWidget {
   static String tag='/SplashScreens';
@@ -19,6 +22,7 @@ class SplashScreens extends StatefulWidget {
 }
 
 class _SplashScreensState extends State<SplashScreens> {
+  final LocalAuthentication auth = LocalAuthentication();
   int mysec=3;
 
   @override
@@ -40,30 +44,67 @@ class _SplashScreensState extends State<SplashScreens> {
 
   Check() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('UserId', "");
     String? final_token = prefs.getString('token');
 
     if (final_token != null && final_token != '') {
-      // int? isadmin = prefs.getInt('IsAdmin');
-      if(prefs.getInt('IsAdmin')==1){
-        launchScreen(context, AdminDashoardScreen.tag);
-      }else{
-        launchScreen(context, CustmerDashoardScreen.tag);
-      }
+      // if(prefs.getInt('IsAdmin')==1){
+      //   launchScreen(context, AdminDashoardScreen.tag);
+      // }else{
+      //   launchScreen(context, CustmerDashoardScreen.tag);
+      // }
+      checkauth();
+      // launchScreen(context, LocalAutScreen.tag);
     }else{
       launchScreen(context, LoginScreen.tag);
     }
 
-    // if(prefs.getString('UserId')=='' ||prefs.getString('UserId')==null) {
-    //   launchScreen(context, LoginScreen.tag);
-    // }else{
-    //   // launchScreen(context, LocalAutScreen.tag);
-    //   if(prefs.getString('usertype')=='Admin') {
-    //     launchScreen(context, AdminDashoardScreen.tag);
-    //   }else{
-    //       launchScreen(context, CustmerDashoardScreen.tag);
-    //   }
-    // }
+  }
+
+  void checkauth() async {
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to show account balance',
+      );
+
+      if(didAuthenticate){
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if(prefs.getInt('IsAdmin')==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+      }else{
+
+      }
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        // Add handling of no hardware here.
+        // toast(e.code.toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if(prefs.getInt('IsAdmin')==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+      } else if (e.code == auth_error.notEnrolled) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        if(prefs.getInt('IsAdmin')==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+        // ...
+        // toast(e.code.toString());
+      } else {
+
+        // _isauthcheck=true;
+        // toast(e.code.toString());
+        // ...
+      }
+    }
+    // toast(canAuthenticateWithBiometrics.toString());
+
   }
 
   @override

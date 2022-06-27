@@ -5,6 +5,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/screens/AdminDashoardScreen.dart';
 import 'package:strapit/screens/CustmerDashoardScreen.dart';
 import 'package:strapit/utils/ShExtension.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 class LocalAutScreen extends StatefulWidget {
   static String tag='/LocalAutScreen';
@@ -26,7 +27,44 @@ class _LocalAutScreenState extends State<LocalAutScreen> {
     super.initState();
     _authenticate();
     // disableCapture();
+    checkauth();
   }
+
+  void checkauth() async {
+    final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+    final bool canAuthenticate =
+        canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+
+    final List<BiometricType> availableBiometrics =
+    await auth.getAvailableBiometrics();
+
+    // if (availableBiometrics.isNotEmpty) {
+    //   // Some biometrics are enrolled.
+    //   toast("true");
+    // }else{
+    //   toast("false");
+    // }
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to show account balance');
+      toast(didAuthenticate.toString());
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        // Add handling of no hardware here.
+        toast(e.code.toString());
+      } else if (e.code == auth_error.notEnrolled) {
+        // ...
+        toast(e.code.toString());
+      } else {
+        toast(e.code.toString());
+        // ...
+      }
+    }
+    // toast(canAuthenticateWithBiometrics.toString());
+
+  }
+
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -55,12 +93,11 @@ class _LocalAutScreenState extends State<LocalAutScreen> {
 
 if(authenticated){
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  if(prefs.getString('usertype')=='Admin') {
+  if(prefs.getInt('IsAdmin')==1){
     launchScreen(context, AdminDashoardScreen.tag);
   }else{
-      launchScreen(context, CustmerDashoardScreen.tag);
+    launchScreen(context, CustmerDashoardScreen.tag);
   }
-
 
 }else{
   setState(

@@ -4,9 +4,11 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/retry.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/CustomerListModel.dart';
 import 'package:strapit/models/PortalAddFailModel.dart';
@@ -18,6 +20,7 @@ import 'package:strapit/utils/ShConstant.dart';
 import 'package:strapit/utils/ShExtension.dart';
 import 'package:http/http.dart'as http;
 import 'package:http/http.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 class EditPortalScreen extends StatefulWidget {
   static String tag='/EditPortalScreen';
@@ -72,13 +75,53 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
   int? IsAdmin;
   String? UserName='';
   ViewPortalModel? viewPortalModel;
+  final LocalAuthentication auth = LocalAuthentication();
+
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
+  bool _isauthcheck=false;
 
   void initState() {
     super.initState();
     // fetchadd();
+    // checkauth();
     viewPortal();
+
     // fetchCustomer();
     // disableCapture();
+  }
+
+  void checkauth() async {
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to show account balance',
+      );
+
+      // toast(didAuthenticate.toString());
+      if(didAuthenticate){
+        getAddPortal();
+      }
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        // Add handling of no hardware here.
+        // toast(e.code.toString());
+        _isauthcheck=false;
+        getAddPortal();
+      } else if (e.code == auth_error.notEnrolled) {
+        _isauthcheck=false;
+        getAddPortal();
+        // ...
+        // toast(e.code.toString());
+      } else {
+
+        _isauthcheck=true;
+        // toast(e.code.toString());
+        // ...
+      }
+    }
+    // toast(canAuthenticateWithBiometrics.toString());
+
   }
 
   _selectDate(BuildContext context) async {
@@ -874,6 +917,41 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
     }
   }
 
+
+  Future<void> _authenticate() async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+          localizedReason: 'Let OS determine authentication method',
+          useErrorDialogs: true,
+          stickyAuth: true);
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = "Error - ${e.message}";
+      });
+      return;
+    }
+    if (!mounted) return;
+
+
+    if(authenticated){
+      getAddPortal();
+
+    }else{
+      setState(
+              () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1858,9 +1936,13 @@ class _EditPortalScreenState extends State<EditPortalScreen> {
                     SizedBox(height: 42,),
                     InkWell(
                       onTap: () async {
-
-                        // toast(customerListModel!.data![selectedAddressIndex]!.id.toString()+ " , "+portal_type);
                         getAddPortal();
+                        // checkauth();
+                        // if(_isauthcheck) {
+                        //   _authenticate();
+                        // }else {
+                        //   getAddPortal();
+                        // }
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,

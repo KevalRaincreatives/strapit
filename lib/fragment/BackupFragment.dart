@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/ListAllBackup2.dart';
 import 'package:strapit/models/ListAllBackupModel.dart';
@@ -14,6 +16,7 @@ import 'package:strapit/utils/ShExtension.dart';
 import 'package:http/http.dart';
 import 'package:http/retry.dart';
 import 'package:http/http.dart'as http;
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 
 class BackupFragment extends StatefulWidget {
@@ -26,6 +29,10 @@ class BackupFragment extends StatefulWidget {
 }
 
 class _BackupFragmentState extends State<BackupFragment> {
+  final LocalAuthentication auth = LocalAuthentication();
+
+  String _authorized = 'Not Authorized';
+  bool _isAuthenticating = false;
   String? pickdate = '', pickmonth = '', pickyear = '';
   DateTime selectedDate = DateTime.now();
   RestoreAddModel? restoreAddModel;
@@ -234,6 +241,75 @@ class _BackupFragmentState extends State<BackupFragment> {
     }
   }
 
+  Future<void> _authenticate(String backupid) async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+        _authorized = 'Authenticating';
+      });
+      authenticated = await auth.authenticate(
+          localizedReason: 'Let OS determine authentication method',
+          useErrorDialogs: true,
+          stickyAuth: true);
+      setState(() {
+        _isAuthenticating = false;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+      setState(() {
+        _isAuthenticating = false;
+        _authorized = "Error - ${e.message}";
+      });
+      return;
+    }
+    if (!mounted) return;
+
+
+    if(authenticated){
+      Navigator.of(context, rootNavigator: true).pop();
+      getAddRestore(backupid);
+
+    }else{
+      setState(
+              () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+    }
+
+  }
+
+  void checkauth(String backupid) async {
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to show account balance',
+      );
+
+      // toast(didAuthenticate.toString());
+      if(didAuthenticate){
+        Navigator.of(context, rootNavigator: true).pop();
+        getAddRestore(backupid);
+      }
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        // Add handling of no hardware here.
+        // toast(e.code.toString());
+        Navigator.of(context, rootNavigator: true).pop();
+        getAddRestore(backupid);
+      } else if (e.code == auth_error.notEnrolled) {
+        Navigator.of(context, rootNavigator: true).pop();
+        getAddRestore(backupid);
+        // ...
+        // toast(e.code.toString());
+      } else {
+
+        // _isauthcheck=true;
+        // toast(e.code.toString());
+        // ...
+      }
+    }
+    // toast(canAuthenticateWithBiometrics.toString());
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -295,9 +371,10 @@ class _BackupFragmentState extends State<BackupFragment> {
                       SizedBox(height: 16,),
                       InkWell(
                         onTap: () async {
-                          // BecameSeller();
-                          Navigator.of(context, rootNavigator: true).pop();
-                          getAddRestore(backupid);
+                          checkauth(backupid);
+                          // _authenticate(backupid);
+                          // Navigator.of(context, rootNavigator: true).pop();
+                          // getAddRestore(backupid);
                          },
                         child: Container(
                           width: MediaQuery.of(context).size.width*.7,

@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/retry.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:strapit/models/ShLoginErrorNewModel.dart';
 import 'package:strapit/models/ShLoginModel.dart';
@@ -16,6 +18,7 @@ import 'package:strapit/utils/ShExtension.dart';
 import 'package:strapit/utils/auth_service.dart';
 import 'package:strapit/utils/database_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_auth/error_codes.dart' as auth_error;
 
 class LoginScreen extends StatefulWidget {
   static String tag='/LoginScreen';
@@ -26,6 +29,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final LocalAuthentication auth = LocalAuthentication();
   var emailCont = TextEditingController();
   var passwordCont = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -123,17 +127,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
             EasyLoading.dismiss();
 
-            // if (snapshot.docs[0]['Type'] == 'Admin') {
+
+            checkauth();
+
+            // if(cat_model!.data!.isAdmin==1){
             //   launchScreen(context, AdminDashoardScreen.tag);
-            // } else {
+            // }else{
             //   launchScreen(context, CustmerDashoardScreen.tag);
             // }
-
-            if(cat_model!.data!.isAdmin==1){
-              launchScreen(context, AdminDashoardScreen.tag);
-            }else{
-              launchScreen(context, CustmerDashoardScreen.tag);
-            }
           }else{
             EasyLoading.dismiss();
             toast("Password is in correct");
@@ -204,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         prefs.setInt('IsAdmin', cat_model!.data!.isAdmin!);
         prefs.commit();
+
         getLoginFirebase();
         // EasyLoading.dismiss();
 
@@ -223,6 +225,52 @@ class _LoginScreenState extends State<LoginScreen> {
       EasyLoading.dismiss();
       print('caught error $e');
     }
+  }
+
+  void checkauth() async {
+
+    try {
+      final bool didAuthenticate = await auth.authenticate(
+        localizedReason: 'Please authenticate to show account balance',
+      );
+
+      if(didAuthenticate){
+        if(cat_model!.data!.isAdmin==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+      }else{
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('UserId', "");
+        prefs.setString('token', "");
+      }
+    } on PlatformException catch (e) {
+      if (e.code == auth_error.notAvailable) {
+        // Add handling of no hardware here.
+        // toast(e.code.toString());
+        if(cat_model!.data!.isAdmin==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+      } else if (e.code == auth_error.notEnrolled) {
+        if(cat_model!.data!.isAdmin==1){
+          launchScreen(context, AdminDashoardScreen.tag);
+        }else{
+          launchScreen(context, CustmerDashoardScreen.tag);
+        }
+        // ...
+        // toast(e.code.toString());
+      } else {
+
+        // _isauthcheck=true;
+        // toast(e.code.toString());
+        // ...
+      }
+    }
+    // toast(canAuthenticateWithBiometrics.toString());
+
   }
 
   @override
